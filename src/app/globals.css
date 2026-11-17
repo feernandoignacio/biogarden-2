@@ -4,6 +4,8 @@
   --green-dark: #1f3529;
   --cream: #f6efdd;
   --cream-soft: #fbf8f0;
+  /* Fundo dos quadros dos vasos e faixas claras, um tom acima do fundo da página */
+  --cream-card: #f6f3eb;
   --sage: #a3ab98;
   --text: #1d2a23;
   --text-soft: #4a5a51;
