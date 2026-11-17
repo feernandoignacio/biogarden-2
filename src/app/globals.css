@@ -1,0 +1,56 @@
+/* Identidade da Biogarden: verde escuro, creme e verde sálvia */
+:root {
+  --green: #2b4739;
+  --green-dark: #1f3529;
+  --cream: #f6efdd;
+  --cream-soft: #fbf8f0;
+  --sage: #a3ab98;
+  --text: #1d2a23;
+  --text-soft: #4a5a51;
+  --white: #ffffff;
+  --radius: 14px;
+  --max-width: 1200px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Desconta o cabeçalho fixo ao pular para uma seção */
+  scroll-padding-top: 72px;
+}
+
+body {
+  margin: 0;
+  background: var(--cream-soft);
+  color: var(--text);
+  font-family: var(--font-body), system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

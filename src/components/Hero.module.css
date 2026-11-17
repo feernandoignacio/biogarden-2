@@ -1,0 +1,110 @@
+.hero {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: 100svh;
+  padding: 120px 24px 80px;
+  overflow: hidden;
+  color: var(--cream);
+}
+
+.background {
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* Verde da marca por cima da foto, mais forte à esquerda onde fica o texto */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    100deg,
+    rgba(31, 53, 41, 0.92) 0%,
+    rgba(43, 71, 57, 0.75) 45%,
+    rgba(43, 71, 57, 0.25) 100%
+  );
+}
+
+.content {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.kicker {
+  margin-bottom: 18px;
+  color: var(--sage);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-brand), serif;
+  font-size: clamp(48px, 9vw, 96px);
+  font-weight: 400;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.title span {
+  margin-top: 10px;
+  font-size: 0.35em;
+  letter-spacing: 0.5em;
+  opacity: 0.85;
+}
+
+.slogan {
+  max-width: 560px;
+  margin-top: 28px;
+  font-family: var(--font-title), serif;
+  font-size: clamp(19px, 2.4vw, 24px);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.primary {
+  background: var(--cream);
+  color: var(--green);
+}
+
+.primary:hover {
+  background: var(--white);
+  transform: translateY(-2px);
+}
+
+.secondary {
+  border: 1px solid rgba(246, 239, 221, 0.7);
+}
+
+.secondary:hover {
+  background: rgba(246, 239, 221, 0.12);
+  transform: translateY(-2px);
+}

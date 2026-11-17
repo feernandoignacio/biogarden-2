@@ -1,0 +1,167 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  color: var(--cream);
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Depois de rolar, o cabeçalho ganha o verde da marca */
+.solid {
+  background: var(--green);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: var(--max-width);
+  height: 72px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-brand), serif;
+  font-size: 22px;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.link {
+  position: relative;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+/* Linha que cresce embaixo do link ao passar o mouse */
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--cream);
+  transition: width 0.25s ease;
+}
+
+.link:hover {
+  opacity: 1;
+}
+
+.link:hover::after {
+  width: 100%;
+}
+
+.contact {
+  padding: 9px 20px;
+  border: 1px solid rgba(246, 239, 221, 0.6);
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.contact:hover {
+  background: var(--cream);
+  color: var(--green);
+}
+
+.menuButton {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.menuButton span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--cream);
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+/* Os três traços viram um X quando o menu abre */
+.menuButton[aria-expanded='true'] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menuButton[aria-expanded='true'] span:nth-child(2) {
+  opacity: 0;
+}
+
+.menuButton[aria-expanded='true'] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 860px) {
+  .menuButton {
+    display: flex;
+  }
+
+  .nav {
+    position: fixed;
+    inset: 72px 0 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px 24px 24px;
+    background: var(--green);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0.2s;
+  }
+
+  .navOpen {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+
+  .link {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(246, 239, 221, 0.15);
+  }
+
+  .link::after {
+    display: none;
+  }
+
+  .contact {
+    margin-top: 16px;
+    text-align: center;
+  }
+}
