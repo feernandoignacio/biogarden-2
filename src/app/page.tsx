@@ -3,9 +3,10 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { Location } from '@/components/Location';
+import { ProductsPreview } from '@/components/ProductsPreview';
 import { WhatsappFloat } from '@/components/WhatsappFloat';
 
-// Produtos, materiais e serviços entram nas próximas partes, entre o Sobre e o mapa
+// Materiais e serviços entram nas próximas partes, antes do mapa
 export default function Home() {
   return (
     <>
@@ -13,6 +14,7 @@ export default function Home() {
       <main>
         <Hero />
         <About />
+        <ProductsPreview />
         <Location />
       </main>
       <Footer />

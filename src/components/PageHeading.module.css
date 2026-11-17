@@ -1,0 +1,50 @@
+.heading {
+  background: var(--green);
+  color: var(--cream);
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 120px 24px 48px;
+}
+
+.trail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  color: var(--sage);
+  font-size: 14px;
+  list-style: none;
+}
+
+/* Setinha entre os itens do caminho */
+.trail li + li::before {
+  content: '›';
+  margin-right: 8px;
+}
+
+.trail a {
+  text-decoration: none;
+}
+
+.trail a:hover {
+  color: var(--cream);
+  text-decoration: underline;
+}
+
+.title {
+  font-family: var(--font-title), serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.text {
+  max-width: 620px;
+  margin-top: 12px;
+  color: rgba(246, 239, 221, 0.85);
+  font-size: 17px;
+}

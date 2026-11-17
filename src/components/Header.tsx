@@ -1,11 +1,19 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { navLinks, whatsappLink } from '@/data/site';
 import styles from './Header.module.css';
 
-export function Header() {
+type HeaderProps = {
+  // Nas páginas sem banner o cabeçalho já começa verde
+  alwaysSolid?: boolean;
+};
+
+export function Header({ alwaysSolid = false }: HeaderProps) {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -31,16 +39,16 @@ export function Header() {
 
   const headerClass = [
     styles.header,
-    isScrolled || isMenuOpen ? styles.solid : '',
+    alwaysSolid || isScrolled || isMenuOpen ? styles.solid : '',
   ].join(' ');
 
   return (
     <header className={headerClass}>
       <div className={styles.inner}>
-        <a href="#inicio" className={styles.brand} aria-label="Início">
+        <Link href="/" className={styles.brand} aria-label="Início">
           <Image src="/images/logo.png" alt="" width={38} height={38} />
           <span>Biogarden</span>
-        </a>
+        </Link>
 
         <nav
           id="menu"
@@ -48,14 +56,15 @@ export function Header() {
           aria-label="Menu principal"
         >
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               className={styles.link}
+              aria-current={pathname.startsWith(link.href) ? 'page' : undefined}
               onClick={() => setIsMenuOpen(false)}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
           <a
             href={whatsappLink(

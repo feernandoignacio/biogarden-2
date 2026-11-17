@@ -1,0 +1,141 @@
+.product {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 56px 24px 72px;
+}
+
+/* Foto grande sobre o creme, sem cortar o vaso */
+.photo {
+  display: grid;
+  place-items: center;
+  min-height: 460px;
+  padding: 40px;
+  border-radius: 24px;
+  background: var(--cream);
+}
+
+.photo img {
+  width: auto;
+  max-width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.type {
+  color: var(--sage);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.description {
+  color: var(--text);
+  font-family: var(--font-title), serif;
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.measure {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid rgba(43, 71, 57, 0.12);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.measure img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+}
+
+.measure p {
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 0 26px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.primary {
+  background: var(--green);
+  color: var(--cream);
+}
+
+.secondary {
+  border: 1px solid rgba(43, 71, 57, 0.3);
+  color: var(--green);
+}
+
+.primary:hover,
+.secondary:hover {
+  transform: translateY(-2px);
+}
+
+.related {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px 96px;
+}
+
+.related h2 {
+  margin-bottom: 24px;
+  color: var(--green);
+  font-family: var(--font-title), serif;
+  font-size: 26px;
+  font-weight: 400;
+}
+
+.related ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 860px) {
+  .product {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 32px 20px 56px;
+  }
+
+  .photo {
+    min-height: 320px;
+  }
+
+  .related ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 14px;
+  }
+}

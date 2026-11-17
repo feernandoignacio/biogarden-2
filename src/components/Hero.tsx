@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { whatsappLink } from '@/data/site';
 import { TypingWord } from './TypingWord';
 import styles from './Hero.module.css';
@@ -32,9 +33,9 @@ export function Hero() {
         </p>
 
         <div className={styles.actions}>
-          <a href="#produtos" className={styles.primary}>
+          <Link href="/vasos" className={styles.primary}>
             Ver os vasos
-          </a>
+          </Link>
           <a
             href={whatsappLink(
               'Olá! Vim pelo site e quero pedir um orçamento.',

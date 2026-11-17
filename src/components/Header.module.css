@@ -65,7 +65,8 @@
   opacity: 1;
 }
 
-.link:hover::after {
+.link:hover::after,
+.link[aria-current='page']::after {
   width: 100%;
 }
 

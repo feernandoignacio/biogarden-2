@@ -15,9 +15,10 @@ export function whatsappLink(message: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+// Começam com "/" para funcionar também nas páginas dos vasos
 export const navLinks = [
-  { href: '#sobre', label: 'Sobre nós' },
-  { href: '#produtos', label: 'Produtos' },
-  { href: '#materiais', label: 'Materiais e cores' },
-  { href: '#servicos', label: 'Serviços' },
+  { href: '/#sobre', label: 'Sobre nós' },
+  { href: '/vasos', label: 'Vasos' },
+  { href: '/#materiais', label: 'Materiais e cores' },
+  { href: '/#servicos', label: 'Serviços' },
 ];
