@@ -9,7 +9,8 @@
   --text-soft: #4a5a51;
   --white: #ffffff;
   --radius: 14px;
-  --max-width: 1200px;
+  /* Cresce com a tela: 1200px em notebook, até 1920px em monitor grande */
+  --max-width: clamp(1200px, 88vw, 1920px);
 }
 
 *,
