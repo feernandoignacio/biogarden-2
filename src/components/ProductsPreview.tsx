@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { findProduct, products, type Product } from '@/data/products';
+import { getProducts } from '@/data/catalog';
 import { ProductCard } from './ProductCard';
 import styles from './ProductsPreview.module.css';
 
@@ -15,10 +15,13 @@ const FEATURED = [
   'jardineira-cuia',
 ];
 
-export function ProductsPreview() {
-  const featured = FEATURED.map(findProduct).filter(
-    (product): product is Product => product !== undefined,
-  );
+export async function ProductsPreview() {
+  const products = await getProducts();
+  // Se algum destaque sair do catálogo, completa com os próximos da lista
+  const featured = [
+    ...products.filter((product) => FEATURED.includes(product.slug)),
+    ...products.filter((product) => !FEATURED.includes(product.slug)),
+  ].slice(0, FEATURED.length);
 
   return (
     <section id="vasos" className={styles.preview}>

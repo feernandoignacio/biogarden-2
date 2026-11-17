@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { productImage, typeLabel, type Product } from '@/data/products';
+import { typeLabel, type Product } from '@/data/products';
 import styles from './ProductCard.module.css';
 
 type ProductCardProps = {
@@ -12,7 +12,7 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link href={`/vasos/${product.slug}`} className={styles.card}>
       <div className={styles.photo}>
         <Image
-          src={productImage(product)}
+          src={product.image}
           alt={`Vaso ${product.name}`}
           width={product.size.width}
           height={product.size.height}

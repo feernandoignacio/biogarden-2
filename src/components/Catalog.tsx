@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { PRODUCT_TYPES, products, type ProductType } from '@/data/products';
+import { PRODUCT_TYPES, type Product, type ProductType } from '@/data/products';
 import { ProductCard } from './ProductCard';
 import styles from './Catalog.module.css';
 
@@ -10,7 +10,7 @@ function normalize(text: string) {
   return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
-export function Catalog() {
+export function Catalog({ products }: { products: Product[] }) {
   const [search, setSearch] = useState('');
   const [type, setType] = useState<ProductType | 'todos'>('todos');
 
@@ -21,7 +21,7 @@ export function Catalog() {
         (type === 'todos' || product.type === type) &&
         normalize(product.name).includes(term),
     );
-  }, [search, type]);
+  }, [products, search, type]);
 
   // Quantos modelos tem em cada tipo, para mostrar no filtro
   function countOf(value: ProductType) {

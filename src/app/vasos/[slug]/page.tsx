@@ -4,18 +4,15 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PageHeading } from '@/components/PageHeading';
 import { ProductCard } from '@/components/ProductCard';
-import {
-  findProduct,
-  measureImage,
-  productImage,
-  products,
-  typeLabel,
-} from '@/data/products';
+import { getProduct, getProducts } from '@/data/catalog';
+import { shareImage, typeLabel } from '@/data/products';
 import { whatsappLink } from '@/data/site';
 import styles from './page.module.css';
 
-// Uma página pronta para cada vaso, gerada no build
-export function generateStaticParams() {
+// Uma página pronta para cada vaso, gerada no build. Vasos criados depois
+// no painel ganham a página na primeira visita.
+export async function generateStaticParams() {
+  const products = await getProducts();
   return products.map((product) => ({ slug: product.slug }));
 }
 
@@ -23,16 +20,11 @@ export async function generateMetadata({
   params,
 }: PageProps<'/vasos/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
-  const product = findProduct(slug);
+  const product = await getProduct(slug);
   if (!product) return {};
   const title = `Vaso ${product.name} | Biogarden Paisagismo`;
-  // Cada vaso tem a própria imagem de prévia, com a foto e o nome dele
-  const image = {
-    url: `/og/vasos/${product.slug}.jpg`,
-    width: 1200,
-    height: 630,
-    alt: `Vaso ${product.name}`,
-  };
+  // Imagem que aparece ao compartilhar o link (WhatsApp, redes sociais)
+  const image = { ...shareImage(product), alt: `Vaso ${product.name}` };
   return {
     title,
     description: product.description,
@@ -51,12 +43,12 @@ export default async function ProductPage({
   params,
 }: PageProps<'/vasos/[slug]'>) {
   const { slug } = await params;
-  const product = findProduct(slug);
+  const product = await getProduct(slug);
   // Endereço de vaso que não existe vai para a página 404
   if (!product) notFound();
 
   // Outros modelos do mesmo tipo, para continuar navegando
-  const related = products
+  const related = (await getProducts())
     .filter((item) => item.type === product.type && item.slug !== product.slug)
     .slice(0, 4);
 
@@ -73,7 +65,7 @@ export default async function ProductPage({
       <section className={styles.product}>
         <div className={styles.photo}>
           <Image
-            src={productImage(product)}
+            src={product.image}
             alt={`Vaso ${product.name}`}
             width={product.size.width}
             height={product.size.height}
@@ -85,17 +77,19 @@ export default async function ProductPage({
           <p className={styles.type}>{typeLabel(product.type)}</p>
           <p className={styles.description}>{product.description}</p>
 
-          <div className={styles.measure}>
-            <Image
-              src={measureImage(product)}
-              alt={`Silhueta do ${product.name} ao lado de uma referência de tamanho`}
-              width={446}
-              height={300}
-            />
-            <p>
-              Tamanho de referência. Para as medidas exatas, fale com a gente.
-            </p>
-          </div>
+          {product.measure && (
+            <div className={styles.measure}>
+              <Image
+                src={product.measure}
+                alt={`Silhueta do ${product.name} ao lado de uma referência de tamanho`}
+                width={446}
+                height={300}
+              />
+              <p>
+                Tamanho de referência. Para as medidas exatas, fale com a gente.
+              </p>
+            </div>
+          )}
 
           <div className={styles.actions}>
             <a

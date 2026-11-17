@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Catalog } from '@/components/Catalog';
 import { Finishes } from '@/components/Finishes';
 import { PageHeading } from '@/components/PageHeading';
+import { getProducts } from '@/data/catalog';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
     'Catálogo de vasos, bacias, cachepôs e fontes da Biogarden, no Ceasa Campinas.',
 };
 
-export default function VasesPage() {
+export default async function VasesPage() {
+  const products = await getProducts();
+
   return (
     <main>
       <PageHeading
@@ -19,7 +22,7 @@ export default function VasesPage() {
         trail={[{ href: '/', label: 'Início' }]}
       />
       <section className={styles.content}>
-        <Catalog />
+        <Catalog products={products} />
       </section>
       {/* Depois de escolher o modelo, a pessoa vê as cores e os materiais */}
       <Finishes />
