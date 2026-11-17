@@ -40,10 +40,10 @@ export function About() {
 
         <figure className={styles.photo}>
           <Image
-            src="/images/loja-ceasa.webp"
-            alt="Vasos esmaltados azuis e laranja no box da Biogarden"
+            src="/images/loja-box.webp"
+            alt="Fachada do box da Biogarden no Mercado de Flores, com vasos e plantas"
             fill
-            sizes="(max-width: 860px) 100vw, 480px"
+            sizes="(max-width: 860px) 100vw, 50vw"
           />
           <figcaption>Nosso box no Ceasa Campinas</figcaption>
         </figure>
