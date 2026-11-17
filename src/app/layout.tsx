@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
+import { PageFade } from '@/components/PageFade';
 import { WhatsappFloat } from '@/components/WhatsappFloat';
 import { SITE_URL } from '@/data/site';
 import './globals.css';
@@ -52,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body>
         {/* Cabeçalho, rodapé e botão do WhatsApp ficam aqui, iguais em todas as páginas */}
         <Header />
-        {children}
+        <PageFade>{children}</PageFade>
         <Footer />
         <WhatsappFloat />
       </body>
