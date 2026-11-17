@@ -26,7 +26,14 @@ html {
 
 body {
   margin: 0;
-  background: var(--cream-soft);
+  /* Fundo claro com pontinhos verdes bem leves, como uma grade */
+  background-color: var(--cream-soft);
+  background-image: radial-gradient(
+    rgba(43, 71, 57, 0.14) 1px,
+    transparent 1.5px
+  );
+  background-size: 22px 22px;
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-body), system-ui, sans-serif;
   line-height: 1.6;
