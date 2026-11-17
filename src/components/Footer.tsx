@@ -53,7 +53,7 @@ export function Footer() {
       </div>
 
       <p className={styles.credits}>
-        © Biogarden Paisagismo · Desenvolvido por Lucas Fernando
+        © Biogarden Paisagismo · Vasos e paisagismo em Campinas
       </p>
     </footer>
   );
