@@ -30,34 +30,6 @@ const SERVICES = [
   },
 ];
 
-// Mais fotos de projetos entregues, para mostrar o trabalho de verdade
-const PROJECTS = [
-  {
-    photo: '/images/projetos/projeto-6.webp',
-    alt: 'Vaso de terracota com planta em canto de madeira',
-  },
-  {
-    photo: '/images/projetos/projeto-2.webp',
-    alt: 'Dois vasos claros com plantas em ambiente interno',
-  },
-  {
-    photo: '/images/projetos/projeto-10.webp',
-    alt: 'Fileira de vasos com plantas em um escritório',
-  },
-  {
-    photo: '/images/projetos/projeto-1.webp',
-    alt: 'Planta alta em vaso claro ao lado de uma porta de vidro',
-  },
-  {
-    photo: '/images/projetos/projeto-7.webp',
-    alt: 'Vaso preto com palmeira em ambiente com parede escura',
-  },
-  {
-    photo: '/images/projetos/projeto-8.webp',
-    alt: 'Vasos com plantas em uma recepção',
-  },
-];
-
 export function Services() {
   return (
     <section id="servicos" className={styles.services}>
@@ -86,22 +58,6 @@ export function Services() {
           </li>
         ))}
       </ul>
-
-      <div className={styles.projects}>
-        <h3 className={styles.projectsTitle}>Alguns projetos entregues</h3>
-        <ul className={styles.gallery}>
-          {PROJECTS.map((project) => (
-            <li key={project.photo}>
-              <Image
-                src={project.photo}
-                alt={project.alt}
-                fill
-                sizes="(max-width: 640px) 50vw, 33vw"
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
 
       <div className={styles.cta}>
         <p>Quer um projeto para o seu espaço?</p>
