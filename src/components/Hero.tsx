@@ -7,7 +7,7 @@ export function Hero() {
   return (
     <section id="inicio" className={styles.hero}>
       <Image
-        src="/images/hero.webp"
+        src="/images/hero-plants.webp"
         alt=""
         fill
         priority

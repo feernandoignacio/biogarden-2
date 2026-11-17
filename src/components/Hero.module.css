@@ -10,21 +10,27 @@
 
 .background {
   object-fit: cover;
+  /* Puxa a foto para a direita, deixando a parede livre atrás do texto */
+  object-position: 75% center;
   z-index: -2;
 }
 
-/* Verde da marca por cima da foto, mais forte à esquerda onde fica o texto */
+/* Verde da marca à esquerda, onde fica o texto; à direita a foto aparece com a luz original */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(
-    100deg,
-    rgba(31, 53, 41, 0.92) 0%,
-    rgba(43, 71, 57, 0.75) 45%,
-    rgba(43, 71, 57, 0.25) 100%
-  );
+  background:
+    /* Sombra leve no topo, para o menu aparecer sobre a parede clara */
+    linear-gradient(to bottom, rgba(20, 35, 27, 0.45), transparent 140px),
+    linear-gradient(
+      100deg,
+      rgba(31, 53, 41, 0.92) 0%,
+      rgba(43, 71, 57, 0.72) 38%,
+      rgba(43, 71, 57, 0.12) 68%,
+      rgba(43, 71, 57, 0) 100%
+    );
 }
 
 .content {
@@ -111,4 +117,15 @@
 .secondary:hover {
   background: rgba(246, 239, 221, 0.12);
   transform: translateY(-2px);
+}
+
+/* No celular o texto ocupa a largura toda: o verde cobre a foto por igual */
+@media (max-width: 700px) {
+  .hero::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(31, 53, 41, 0.85),
+      rgba(43, 71, 57, 0.7)
+    );
+  }
 }
