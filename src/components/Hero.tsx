@@ -24,7 +24,11 @@ export function Hero() {
         <p className={styles.slogan}>
           Transforme seu espaço com elegância botânica.
           <br />
-          Inspiração verde em cada vaso, arte em cada <TypingWord />
+          Inspiração verde em cada vaso,{' '}
+          {/* "arte em cada" e a palavra digitada ficam sempre juntos, na mesma linha */}
+          <span className={styles.noWrap}>
+            arte em cada <TypingWord />
+          </span>
         </p>
 
         <div className={styles.actions}>

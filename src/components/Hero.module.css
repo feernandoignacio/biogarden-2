@@ -60,11 +60,15 @@
 }
 
 .slogan {
-  max-width: 560px;
+  max-width: 680px;
   margin-top: 28px;
   font-family: var(--font-title), serif;
   font-size: clamp(19px, 2.4vw, 24px);
   line-height: 1.5;
+}
+
+.noWrap {
+  white-space: nowrap;
 }
 
 .actions {
