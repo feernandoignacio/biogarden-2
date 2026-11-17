@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { PageFade } from '@/components/PageFade';
+import { ScrollReveal } from '@/components/ScrollReveal';
 import { WhatsappFloat } from '@/components/WhatsappFloat';
 import { SITE_URL } from '@/data/site';
 import './globals.css';
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <PageFade>{children}</PageFade>
         <Footer />
         <WhatsappFloat />
+        <ScrollReveal />
       </body>
     </html>
   );
