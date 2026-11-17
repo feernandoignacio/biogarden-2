@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { Footer } from '@/components/Footer';
+import { Header } from '@/components/Header';
+import { WhatsappFloat } from '@/components/WhatsappFloat';
 import './globals.css';
 
 // Fontes do site original, guardadas no projeto (não dependem do Google)
@@ -35,7 +38,13 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       lang="pt-BR"
       className={`${marcellus.variable} ${marcellusSc.variable} ${roboto.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {/* Cabeçalho, rodapé e botão do WhatsApp ficam aqui, iguais em todas as páginas */}
+        <Header />
+        {children}
+        <Footer />
+        <WhatsappFloat />
+      </body>
     </html>
   );
 }

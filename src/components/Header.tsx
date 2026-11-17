@@ -7,13 +7,10 @@ import { useEffect, useState } from 'react';
 import { navLinks, whatsappLink } from '@/data/site';
 import styles from './Header.module.css';
 
-type HeaderProps = {
-  // Nas páginas sem banner o cabeçalho já começa verde
-  alwaysSolid?: boolean;
-};
-
-export function Header({ alwaysSolid = false }: HeaderProps) {
+export function Header() {
   const pathname = usePathname();
+  // Só a página inicial tem o banner; nas outras o cabeçalho já começa verde
+  const alwaysSolid = pathname !== '/';
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 

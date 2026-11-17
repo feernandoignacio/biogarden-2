@@ -2,11 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
 import { PageHeading } from '@/components/PageHeading';
 import { ProductCard } from '@/components/ProductCard';
-import { WhatsappFloat } from '@/components/WhatsappFloat';
 import {
   findProduct,
   measureImage,
@@ -48,77 +45,72 @@ export default async function ProductPage({
     .slice(0, 4);
 
   return (
-    <>
-      <Header alwaysSolid />
-      <main>
-        <PageHeading
-          title={product.name}
-          trail={[
-            { href: '/', label: 'Início' },
-            { href: '/vasos', label: 'Vasos' },
-          ]}
-        />
+    <main>
+      <PageHeading
+        title={product.name}
+        trail={[
+          { href: '/', label: 'Início' },
+          { href: '/vasos', label: 'Vasos' },
+        ]}
+      />
 
-        <section className={styles.product}>
-          <div className={styles.photo}>
+      <section className={styles.product}>
+        <div className={styles.photo}>
+          <Image
+            src={productImage(product)}
+            alt={`Vaso ${product.name}`}
+            width={product.size.width}
+            height={product.size.height}
+            priority
+          />
+        </div>
+
+        <div className={styles.details}>
+          <p className={styles.type}>{typeLabel(product.type)}</p>
+          <p className={styles.description}>{product.description}</p>
+
+          <div className={styles.measure}>
             <Image
-              src={productImage(product)}
-              alt={`Vaso ${product.name}`}
-              width={product.size.width}
-              height={product.size.height}
-              priority
+              src={measureImage(product)}
+              alt={`Silhueta do ${product.name} ao lado de uma referência de tamanho`}
+              width={446}
+              height={300}
             />
+            <p>
+              Tamanho de referência. Para as medidas exatas, fale com a gente.
+            </p>
           </div>
 
-          <div className={styles.details}>
-            <p className={styles.type}>{typeLabel(product.type)}</p>
-            <p className={styles.description}>{product.description}</p>
-
-            <div className={styles.measure}>
-              <Image
-                src={measureImage(product)}
-                alt={`Silhueta do ${product.name} ao lado de uma referência de tamanho`}
-                width={446}
-                height={300}
-              />
-              <p>
-                Tamanho de referência. Para as medidas exatas, fale com a gente.
-              </p>
-            </div>
-
-            <div className={styles.actions}>
-              <a
-                href={whatsappLink(
-                  `Olá! Vim pelo site e quero um orçamento do vaso ${product.name}.`,
-                )}
-                target="_blank"
-                rel="noreferrer"
-                className={styles.primary}
-              >
-                Pedir orçamento deste vaso
-              </a>
-              <Link href="/vasos" className={styles.secondary}>
-                Ver todos os vasos
-              </Link>
-            </div>
+          <div className={styles.actions}>
+            <a
+              href={whatsappLink(
+                `Olá! Vim pelo site e quero um orçamento do vaso ${product.name}.`,
+              )}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.primary}
+            >
+              Pedir orçamento deste vaso
+            </a>
+            <Link href="/vasos" className={styles.secondary}>
+              Ver todos os vasos
+            </Link>
           </div>
+        </div>
+      </section>
+
+      {related.length > 0 && (
+        <section className={styles.related}>
+          <h2>Outros modelos de {typeLabel(product.type).toLowerCase()}</h2>
+          <ul>
+            {related.map((item) => (
+              <li key={item.slug}>
+                <ProductCard product={item} />
+              </li>
+            ))}
+          </ul>
         </section>
-
-        {related.length > 0 && (
-          <section className={styles.related}>
-            <h2>Outros modelos de {typeLabel(product.type).toLowerCase()}</h2>
-            <ul>
-              {related.map((item) => (
-                <li key={item.slug}>
-                  <ProductCard product={item} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-      </main>
-      <Footer />
-      <WhatsappFloat />
-    </>
+      )}
+    </main>
   );
 }
