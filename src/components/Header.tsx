@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import { navLinks, whatsappLink } from '@/data/site';
 import styles from './Header.module.css';
 
@@ -34,14 +34,27 @@ export function Header() {
     return () => window.removeEventListener('keydown', handleKey);
   }, [isMenuOpen]);
 
-  // Clicar de novo num link de seção da mesma página (ex: "/vasos#materiais"
-  // estando em /vasos) não muda o endereço, então o navegador não rola sozinho
-  function handleLinkClick(href: string) {
+  // Link para a página em que o visitante já está (ex: "Materiais e cores"
+  // estando em /vasos, ou o logo estando no início): em vez de deixar o
+  // Next.js pular direto, a tela desliza até a seção ou até o topo
+  function handleLinkClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
     setIsMenuOpen(false);
     const [path, id] = href.split('#');
-    if (id && path === pathname) {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    if (path !== pathname) return;
+
+    event.preventDefault();
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    const behavior = reduceMotion ? 'auto' : 'smooth';
+    const target = id ? document.getElementById(id) : null;
+    if (target) {
+      target.scrollIntoView({ behavior });
+    } else {
+      window.scrollTo({ top: 0, behavior });
     }
+    // Atualiza o endereço sem recarregar, para o voltar do navegador funcionar
+    window.history.pushState(null, '', href);
   }
 
   const headerClass = [
@@ -52,7 +65,12 @@ export function Header() {
   return (
     <header className={headerClass}>
       <div className={styles.inner}>
-        <Link href="/" className={styles.brand} aria-label="Início">
+        <Link
+          href="/"
+          className={styles.brand}
+          aria-label="Início"
+          onClick={(event) => handleLinkClick(event, '/')}
+        >
           <Image src="/images/logo.png" alt="" width={38} height={38} />
           <span>Biogarden</span>
         </Link>
@@ -68,7 +86,7 @@ export function Header() {
               href={link.href}
               className={styles.link}
               aria-current={pathname.startsWith(link.href) ? 'page' : undefined}
-              onClick={() => handleLinkClick(link.href)}
+              onClick={(event) => handleLinkClick(event, link.href)}
             >
               {link.label}
             </Link>

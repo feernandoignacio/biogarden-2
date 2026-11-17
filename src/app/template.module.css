@@ -2,7 +2,7 @@
    Só a opacidade muda, para não atrapalhar o pulo direto para uma seção
    (ex: "Sobre nós" vindo de outra página) */
 .page {
-  animation: page-in 0.4s ease-out backwards;
+  animation: page-in 0.5s ease-out backwards;
 }
 
 @keyframes page-in {
