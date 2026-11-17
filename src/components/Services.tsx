@@ -19,8 +19,8 @@ const SERVICES = [
   {
     title: 'Paisagismo personalizado',
     text: 'Projetos para jardim, varanda ou área externa, unindo plantas, vasos e decoração.',
-    photo: '/images/projetos/projeto-5.webp',
-    alt: 'Pátio externo com vários vasos e plantas organizados',
+    photo: '/images/projetos/paisagismo-casa.webp',
+    alt: 'Fachada de casa com oliveira no jardim e plantas na varanda',
   },
   {
     title: 'Visitas técnicas',
