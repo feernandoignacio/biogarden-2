@@ -3,8 +3,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { glazes, materials, type Finish } from '@/data/finishes';
-import { whatsappLink } from '@/data/site';
-import { WhatsappIcon } from './Icons';
 import styles from './Finishes.module.css';
 
 const TABS = [
@@ -75,24 +73,10 @@ export function Finishes() {
         ))}
       </ul>
 
-      <div className={styles.note}>
-        <p>
-          As cores podem variar um pouco de peça para peça, porque cada esmalte
-          é feito à mão.
-        </p>
-        <a
-          href={whatsappLink(
-            'Olá! Vim pelo site e quero saber quais vasos têm a cor que eu gostei.',
-          )}
-          target="_blank"
-          rel="noreferrer"
-          className={styles.noteLink}
-        >
-          <WhatsappIcon size={18} />
-          Perguntar sobre uma cor
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
+      <p className={styles.note}>
+        As cores podem variar um pouco de peça para peça, porque cada esmalte é
+        feito à mão.
+      </p>
     </section>
   );
 }

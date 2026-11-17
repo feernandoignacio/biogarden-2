@@ -126,50 +126,10 @@
   font-size: 16px;
 }
 
-/* Faixa final: aviso das cores e botão para perguntar no WhatsApp */
 .note {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 40px;
-  padding: 20px 24px;
-  border-radius: var(--radius);
-  background: var(--cream-card);
+  margin-top: 32px;
   color: var(--text-soft);
-  font-size: 15px;
-}
-
-.noteLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 46px;
-  padding: 0 22px;
-  border: 1px solid var(--green);
-  border-radius: 999px;
-  color: var(--green);
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-/* A setinha anda um pouco para a direita ao passar o mouse */
-.noteLink span {
-  transition: transform 0.2s ease;
-}
-
-.noteLink:hover {
-  background: var(--green);
-  color: var(--cream);
-}
-
-.noteLink:hover span {
-  transform: translateX(4px);
+  font-size: 14px;
 }
 
 @media (max-width: 640px) {
@@ -193,11 +153,6 @@
 
   .item p {
     font-size: 14px;
-  }
-
-  .noteLink {
-    width: 100%;
-    justify-content: center;
   }
 }
 
