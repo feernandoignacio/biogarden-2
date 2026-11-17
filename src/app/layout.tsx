@@ -45,6 +45,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html
       lang="pt-BR"
+      // Troca de página vai direto ao topo; links de seção na mesma página rolam suave
+      data-scroll-behavior="smooth"
       className={`${marcellus.variable} ${marcellusSc.variable} ${roboto.variable}`}
     >
       <body>
