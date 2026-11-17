@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { WhatsappFloat } from '@/components/WhatsappFloat';
+import { SITE_URL } from '@/data/site';
 import './globals.css';
 
 // Fontes do site original, guardadas no projeto (não dependem do Google)
@@ -27,9 +28,17 @@ const roboto = localFont({
 });
 
 export const metadata: Metadata = {
+  // Base para os links completos das prévias (WhatsApp, Instagram, Google)
+  metadataBase: new URL(SITE_URL),
   title: 'Biogarden Paisagismo | Vasos e paisagismo em Campinas',
   description:
     'Vasos decorativos, montagem e paisagismo personalizado. Loja no Ceasa Campinas, Mercado de Flores.',
+  openGraph: {
+    siteName: 'Biogarden Paisagismo',
+    locale: 'pt_BR',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

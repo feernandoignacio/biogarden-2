@@ -25,9 +25,25 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = findProduct(slug);
   if (!product) return {};
+  const title = `Vaso ${product.name} | Biogarden Paisagismo`;
+  // Cada vaso tem a própria imagem de prévia, com a foto e o nome dele
+  const image = {
+    url: `/og/vasos/${product.slug}.jpg`,
+    width: 1200,
+    height: 630,
+    alt: `Vaso ${product.name}`,
+  };
   return {
-    title: `Vaso ${product.name} | Biogarden Paisagismo`,
+    title,
     description: product.description,
+    alternates: { canonical: `/vasos/${product.slug}` },
+    openGraph: {
+      title,
+      description: product.description,
+      url: `/vasos/${product.slug}`,
+      images: [image],
+    },
+    twitter: { images: [image.url] },
   };
 }
 

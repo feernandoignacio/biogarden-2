@@ -1,3 +1,6 @@
+// Endereço do site. Quando a Biogarden tiver domínio próprio, troque só aqui
+export const SITE_URL = 'https://biogarden-2.vercel.app';
+
 // Dados de contato da Biogarden, usados no site todo
 export const site = {
   name: 'Biogarden Paisagismo',
