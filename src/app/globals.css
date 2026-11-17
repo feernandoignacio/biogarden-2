@@ -60,8 +60,8 @@ img {
   opacity: 0;
   transform: translateY(28px);
   transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
 }
 
 .reveal.reveal-in {
