@@ -34,6 +34,16 @@ export function Header() {
     return () => window.removeEventListener('keydown', handleKey);
   }, [isMenuOpen]);
 
+  // Clicar de novo num link de seção da mesma página (ex: "/vasos#materiais"
+  // estando em /vasos) não muda o endereço, então o navegador não rola sozinho
+  function handleLinkClick(href: string) {
+    setIsMenuOpen(false);
+    const [path, id] = href.split('#');
+    if (id && path === pathname) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   const headerClass = [
     styles.header,
     alwaysSolid || isScrolled || isMenuOpen ? styles.solid : '',
@@ -58,7 +68,7 @@ export function Header() {
               href={link.href}
               className={styles.link}
               aria-current={pathname.startsWith(link.href) ? 'page' : undefined}
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => handleLinkClick(link.href)}
             >
               {link.label}
             </Link>

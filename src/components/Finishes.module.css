@@ -1,7 +1,9 @@
 .finishes {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 24px 24px 104px;
+  padding: 56px 24px 104px;
+  /* Linha fina separando do catálogo logo acima */
+  border-top: 1px solid rgba(43, 71, 57, 0.12);
 }
 
 .top {

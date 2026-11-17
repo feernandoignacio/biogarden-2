@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Catalog } from '@/components/Catalog';
+import { Finishes } from '@/components/Finishes';
 import { PageHeading } from '@/components/PageHeading';
 import styles from './page.module.css';
 
@@ -20,6 +21,8 @@ export default function VasesPage() {
       <section className={styles.content}>
         <Catalog />
       </section>
+      {/* Depois de escolher o modelo, a pessoa vê as cores e os materiais */}
+      <Finishes />
     </main>
   );
 }
