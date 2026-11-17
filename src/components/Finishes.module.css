@@ -1,0 +1,170 @@
+.finishes {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 24px 24px 104px;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.top > div {
+  max-width: 620px;
+}
+
+.kicker {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: 10px;
+  color: var(--green);
+  font-family: var(--font-title), serif;
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.intro {
+  margin-top: 14px;
+  color: var(--text-soft);
+  font-size: 17px;
+}
+
+/* Botões de aba no formato de pílula, iguais aos filtros do catálogo */
+.tabs {
+  display: flex;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid rgba(43, 71, 57, 0.15);
+  border-radius: 999px;
+  background: var(--white);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--green);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.tab span {
+  color: var(--sage);
+  font-size: 12px;
+}
+
+.tab:hover {
+  background: var(--cream-card);
+}
+
+.tab[aria-selected='true'] {
+  background: var(--green);
+  color: var(--cream);
+}
+
+.tab[aria-selected='true'] span {
+  color: var(--cream);
+  opacity: 0.7;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 24px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.swatch {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 16px rgba(31, 53, 41, 0.12);
+}
+
+.swatch img {
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.item:hover .swatch img {
+  transform: scale(1.08);
+}
+
+.item p {
+  color: var(--green);
+  font-family: var(--font-title), serif;
+  font-size: 16px;
+}
+
+.note {
+  margin-top: 36px;
+  color: var(--text-soft);
+  font-size: 15px;
+}
+
+.note a {
+  color: var(--green);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .finishes {
+    padding: 8px 20px 72px;
+  }
+
+  .tabs {
+    width: 100%;
+  }
+
+  .tab {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px 10px;
+  }
+
+  .item p {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swatch img {
+    transition: none;
+  }
+
+  .item:hover .swatch img {
+    transform: none;
+  }
+}
