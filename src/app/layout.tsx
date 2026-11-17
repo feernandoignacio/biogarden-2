@@ -4,6 +4,7 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { PageFade } from '@/components/PageFade';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { SiteOnly } from '@/components/SiteOnly';
 import { WhatsappFloat } from '@/components/WhatsappFloat';
 import { SITE_URL } from '@/data/site';
 import './globals.css';
@@ -52,12 +53,16 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       className={`${marcellus.variable} ${marcellusSc.variable} ${roboto.variable}`}
     >
       <body>
-        {/* Cabeçalho, rodapé e botão do WhatsApp ficam aqui, iguais em todas as páginas */}
-        <Header />
+        {/* Cabeçalho, rodapé e botão do WhatsApp ficam aqui, iguais em todas as páginas do site (no painel não aparecem) */}
+        <SiteOnly>
+          <Header />
+        </SiteOnly>
         <PageFade>{children}</PageFade>
-        <Footer />
-        <WhatsappFloat />
-        <ScrollReveal />
+        <SiteOnly>
+          <Footer />
+          <WhatsappFloat />
+          <ScrollReveal />
+        </SiteOnly>
       </body>
     </html>
   );
