@@ -338,9 +338,25 @@
   color: var(--text-soft);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   .card {
-    padding: 20px;
+    padding: 18px;
+  }
+
+  /* No celular a prévia do site sai para a tela ficar curta */
+  .preview {
+    display: none;
+  }
+
+  .photo {
+    width: 110px;
+    height: 110px;
+  }
+
+  .danger {
+    margin-right: 0;
+    flex-basis: 100%;
+    justify-content: center;
   }
 
   .row {
@@ -350,5 +366,11 @@
   .actions > * {
     flex: 1;
     justify-content: center;
+  }
+
+  .primary,
+  .secondary {
+    padding: 0 16px;
+    white-space: nowrap;
   }
 }

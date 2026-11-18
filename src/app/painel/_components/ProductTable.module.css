@@ -388,3 +388,169 @@ tr[data-hidden='true'] .name {
     transition: none;
   }
 }
+
+/* Cards e botão flutuante: só no celular */
+.cards,
+.fab {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .title {
+    font-size: 1.9rem;
+  }
+
+  .summary {
+    font-size: 0.875rem;
+  }
+
+  /* No celular o "Novo item" vira o botão flutuante */
+  .header .primary {
+    display: none;
+  }
+
+  .fab {
+    position: fixed;
+    right: 16px;
+    bottom: 20px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 54px;
+    padding: 0 22px;
+    border-radius: 999px;
+    background: var(--green);
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 500;
+    box-shadow: 0 10px 24px rgb(31 53 41 / 0.28);
+  }
+
+  .search {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .search input {
+    height: 46px;
+  }
+
+  /* Filtros numa linha só, rolando para o lado */
+  .chips {
+    flex-wrap: nowrap;
+    width: calc(100% + 32px);
+    margin: 0 -16px;
+    padding: 0 16px 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex-shrink: 0;
+  }
+
+  .tableWrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .table {
+    display: none;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid rgb(43 71 57 / 0.1);
+    border-radius: 14px;
+    background: var(--white);
+  }
+
+  .cardTop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cardTop .thumb {
+    width: 60px;
+    height: 60px;
+  }
+
+  .cardText {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cardText .name {
+    font-size: 1.06rem;
+  }
+
+  .cardMeta {
+    font-size: 0.8rem;
+    color: var(--text-soft);
+  }
+
+  .card[data-hidden='true'] .thumb,
+  .card[data-hidden='true'] .name {
+    opacity: 0.5;
+  }
+
+  .editIcon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgb(43 71 57 / 0.25);
+    border-radius: 50%;
+    color: var(--green);
+  }
+
+  .cardBottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgb(43 71 57 / 0.08);
+  }
+
+  /* Botões maiores para o dedo */
+  .stepper button {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
+
+  .stepper input {
+    height: 44px;
+    width: 54px;
+  }
+
+  /* Espaço para o botão flutuante não cobrir o último card */
+  .note {
+    padding-bottom: 72px;
+  }
+}

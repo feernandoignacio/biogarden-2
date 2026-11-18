@@ -49,7 +49,8 @@ export function PanelShell({ email, total, children }: Props) {
             rel="noreferrer"
             className={styles.siteLink}
           >
-            Ver o site no ar
+            <span className={styles.longLabel}>Ver o site no ar</span>
+            <span className={styles.shortLabel}>Ver site</span>
             <svg
               width="13"
               height="13"

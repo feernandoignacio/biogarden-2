@@ -204,33 +204,7 @@ export function ProductTable({
               <tr key={item.slug} data-hidden={!item.visible}>
                 <td>
                   <div className={styles.product}>
-                    <div className={styles.thumb}>
-                      {item.image ? (
-                        <Image src={item.image} alt="" fill sizes="56px" />
-                      ) : (
-                        <svg
-                          className={styles.noPhoto}
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.6"
-                          aria-label="Sem foto"
-                        >
-                          <rect x="3" y="5" width="18" height="14" rx="2" />
-                          <circle cx="9" cy="10" r="1.6" />
-                          <path d="m3 17 5-5 4 4 3-3 6 6" />
-                        </svg>
-                      )}
-                      <span
-                        className={styles.badge}
-                        data-empty={item.stock === 0}
-                        title={`${item.stock} na loja`}
-                      >
-                        {item.stock}
-                      </span>
-                    </div>
+                    <Thumb item={item} />
                     <span className={styles.name}>{item.name}</span>
                   </div>
                 </td>
@@ -244,27 +218,7 @@ export function ProductTable({
                   />
                 </td>
                 <td>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={item.visible}
-                    aria-label={`Mostrar ${item.name} no site`}
-                    className={styles.switch}
-                    disabled={!item.image}
-                    title={item.image ? undefined : 'Aguardando foto'}
-                    onClick={() => toggle(item)}
-                  >
-                    <span className={styles.track}>
-                      <span className={styles.knob} />
-                    </span>
-                    <span>
-                      {!item.image
-                        ? 'Provisório, sem foto'
-                        : item.visible
-                          ? 'Sim'
-                          : 'Oculto'}
-                    </span>
-                  </button>
+                  <SiteSwitch item={item} onToggle={() => toggle(item)} />
                 </td>
                 <td className={styles.muted}>{item.updated}</td>
                 <td className={styles.right}>
@@ -280,12 +234,78 @@ export function ProductTable({
           </tbody>
         </table>
 
+        {/* No celular a tabela vira uma lista de cards */}
+        <ul className={styles.cards}>
+          {filtered.map((item) => (
+            <li
+              key={item.slug}
+              className={styles.card}
+              data-hidden={!item.visible}
+            >
+              <div className={styles.cardTop}>
+                <Thumb item={item} />
+                <div className={styles.cardText}>
+                  <span className={styles.name}>{item.name}</span>
+                  <span className={styles.cardMeta}>
+                    {typeLabel(item.type)} · {item.updated}
+                  </span>
+                </div>
+                <Link
+                  href={`/painel/vasos/${item.slug}`}
+                  className={styles.editIcon}
+                  aria-label={`Editar ${item.name}`}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 20h4L19 9l-4-4L4 16z" />
+                  </svg>
+                </Link>
+              </div>
+              <div className={styles.cardBottom}>
+                <StockStepper
+                  key={item.stock}
+                  name={item.name}
+                  value={item.stock}
+                  onChange={(stock) => changeStock(item, stock)}
+                />
+                <SiteSwitch item={item} onToggle={() => toggle(item)} />
+              </div>
+            </li>
+          ))}
+        </ul>
+
         {filtered.length === 0 && (
           <p className={styles.empty}>
             Nenhum vaso encontrado com esse filtro.
           </p>
         )}
       </div>
+
+      <Link
+        href="/painel/vasos/novo"
+        className={styles.fab}
+        aria-label="Novo item"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+        Novo item
+      </Link>
 
       <p className={styles.note}>
         Mostrando {filtered.length} de {items.length} vasos. Desligar
@@ -347,5 +367,71 @@ function StockStepper({
         +
       </button>
     </div>
+  );
+}
+
+// Foto pequena com a bolinha de estoque no canto
+function Thumb({ item }: { item: PanelProduct }) {
+  return (
+    <div className={styles.thumb}>
+      {item.image ? (
+        <Image src={item.image} alt="" fill sizes="60px" />
+      ) : (
+        <svg
+          className={styles.noPhoto}
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          aria-label="Sem foto"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <circle cx="9" cy="10" r="1.6" />
+          <path d="m3 17 5-5 4 4 3-3 6 6" />
+        </svg>
+      )}
+      <span
+        className={styles.badge}
+        data-empty={item.stock === 0}
+        title={`${item.stock} na loja`}
+      >
+        {item.stock}
+      </span>
+    </div>
+  );
+}
+
+// Chave "Aparece no site" (travada nos itens provisórios, sem foto)
+function SiteSwitch({
+  item,
+  onToggle,
+}: {
+  item: PanelProduct;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={item.visible}
+      aria-label={`Mostrar ${item.name} no site`}
+      className={styles.switch}
+      disabled={!item.image}
+      title={item.image ? undefined : 'Aguardando foto'}
+      onClick={onToggle}
+    >
+      <span className={styles.track}>
+        <span className={styles.knob} />
+      </span>
+      <span>
+        {!item.image
+          ? 'Provisório, sem foto'
+          : item.visible
+            ? 'No site'
+            : 'Oculto'}
+      </span>
+    </button>
   );
 }
