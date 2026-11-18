@@ -1,60 +1,68 @@
 import { connection } from 'next/server';
 import { Suspense } from 'react';
-import { typeLabel, type ProductType } from '@/data/products';
+import type { ProductType } from '@/data/products';
 import { createSupabaseServer } from '@/lib/supabase/server';
-import { signOut } from './actions';
+import { PanelShell } from './_components/PanelShell';
+import { ProductTable, type PanelProduct } from './_components/ProductTable';
 import styles from './page.module.css';
 
 export default function PanelPage() {
   return (
-    <main className={styles.page}>
-      <header className={styles.bar}>
-        <p className={styles.brand}>Painel Biogarden</p>
-        <form action={signOut}>
-          <button type="submit" className={styles.logout}>
-            Sair
-          </button>
-        </form>
-      </header>
-      <Suspense
-        fallback={<p className={styles.loading}>Carregando vasos...</p>}
-      >
-        <ProductList />
-      </Suspense>
-    </main>
+    <Suspense fallback={<p className={styles.loading}>Carregando painel...</p>}>
+      <PanelHome />
+    </Suspense>
   );
 }
 
-// Lista provisória: a tela completa de vasos entra na próxima parte
-async function ProductList() {
-  // Sempre na hora: a lista depende de quem está logado
+async function PanelHome() {
+  // Sempre na hora: os dados dependem de quem está logado
   await connection();
   const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('products')
-    .select('slug, name, type, visible')
-    .order('position');
+  const [{ data: auth }, { data, error }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase
+      .from('products')
+      .select('slug, name, type, image_url, visible, updated_at')
+      .order('position'),
+  ]);
 
-  if (error) {
-    return (
-      <p className={styles.loading}>Não foi possível carregar os vasos.</p>
-    );
-  }
+  const products: PanelProduct[] = (data ?? []).map((row) => ({
+    slug: row.slug,
+    name: row.name,
+    type: row.type as ProductType,
+    image: row.image_url,
+    visible: row.visible,
+    updated: relativeDay(row.updated_at),
+  }));
 
   return (
-    <section className={styles.content}>
-      <h1 className={styles.title}>Vasos ({data.length})</h1>
-      <ul className={styles.list}>
-        {data.map((product) => (
-          <li key={product.slug}>
-            <span>{product.name}</span>
-            <span className={styles.meta}>
-              {typeLabel(product.type as ProductType)}
-              {!product.visible && ' · escondido'}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <PanelShell email={auth.user?.email ?? ''} total={products.length}>
+      {error ? (
+        <p className={styles.loading}>
+          Não foi possível carregar os vasos. Atualize a página.
+        </p>
+      ) : (
+        <ProductTable products={products} />
+      )}
+    </PanelShell>
   );
+}
+
+// "Hoje", "Ontem", "Há 3 dias"... contando no horário de Brasília
+function relativeDay(iso: string) {
+  const day = (date: Date) =>
+    new Date(
+      date.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }),
+    ).getTime();
+  const days = Math.round((day(new Date()) - day(new Date(iso))) / 86_400_000);
+
+  if (days <= 0) return 'Hoje';
+  if (days === 1) return 'Ontem';
+  if (days < 7) return `Há ${days} dias`;
+  if (days < 30) {
+    const weeks = Math.floor(days / 7);
+    return weeks === 1 ? 'Há 1 semana' : `Há ${weeks} semanas`;
+  }
+  const months = Math.floor(days / 30);
+  return months === 1 ? 'Há 1 mês' : `Há ${months} meses`;
 }
