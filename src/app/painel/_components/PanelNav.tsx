@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { signOut } from '../actions';
 import styles from './PanelShell.module.css';
 
 // Categorias do menu. Quando entrarem novas (adubo, terra, jardim...),
@@ -12,7 +13,7 @@ const SECTIONS = [{ href: '/painel', label: 'Vasos', icon: 'vaso' as const }];
 
 // Logo + menu de categorias. No computador o menu fica sempre aberto na
 // barra lateral; no celular ele desce ao tocar na logo.
-export function PanelNav({ total }: { total: number }) {
+export function PanelNav({ total, email }: { total: number; email: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [lastPath, setLastPath] = useState(pathname);
@@ -118,6 +119,50 @@ export function PanelNav({ total }: { total: number }) {
             </Link>
           );
         })}
+
+        {/* Só no celular: no computador estes ficam no pé da barra lateral */}
+        <div className={styles.menuExtras}>
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.menuLink}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              aria-hidden="true"
+            >
+              <path d="M14 4h6v6" />
+              <path d="M20 4 10 14" />
+              <path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
+            </svg>
+            Ver o site no ar
+          </a>
+          <form action={signOut}>
+            <button type="submit" className={styles.menuLink}>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                aria-hidden="true"
+              >
+                <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" />
+                <path d="M10 8l-4 4 4 4" />
+                <path d="M6 12h10" />
+              </svg>
+              Sair
+            </button>
+          </form>
+          <span className={styles.menuUser}>Conectado como {email}</span>
+        </div>
       </nav>
     </div>
   );

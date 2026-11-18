@@ -22,7 +22,8 @@
   gap: 28px;
 }
 
-.brandToggle {
+.brandToggle,
+.menuExtras {
   display: none !important;
 }
 
@@ -240,12 +241,48 @@
     min-height: 48px;
   }
 
+  /* No celular "Ver site" e "Sair" ficam dentro do menu da logo */
   .footer {
-    margin: 0 0 0 auto;
-    flex-direction: row;
+    display: none;
+  }
+
+  .menuExtras {
+    display: flex !important;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgb(246 239 221 / 0.15);
+  }
+
+  .menuLink {
+    display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 0;
+    gap: 12px;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #e3e8df;
+    font: inherit;
+    font-size: 0.94rem;
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .menuLink:active,
+  .menuLink:hover {
+    background: rgb(246 239 221 / 0.1);
+  }
+
+  .menuUser {
+    padding: 6px 12px 4px;
+    font-size: 0.75rem;
+    color: #c9d1c2;
+    overflow-wrap: anywhere;
   }
 
   .logout {

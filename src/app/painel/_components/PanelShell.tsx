@@ -13,7 +13,7 @@ export function PanelShell({ email, total, children }: Props) {
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <PanelNav total={total} />
+        <PanelNav total={total} email={email} />
 
         <div className={styles.footer}>
           <a
