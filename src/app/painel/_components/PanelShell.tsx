@@ -51,8 +51,8 @@ export function PanelShell({ email, total, children }: Props) {
           >
             Ver o site no ar
             <svg
-              width="16"
-              height="16"
+              width="13"
+              height="13"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
