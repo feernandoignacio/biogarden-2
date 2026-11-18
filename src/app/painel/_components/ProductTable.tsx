@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useOptimistic, useState, useTransition } from 'react';
 import { PRODUCT_TYPES, typeLabel, type ProductType } from '@/data/products';
-import { setVisibility } from '../actions';
+import { setStock, setVisibility } from '../actions';
 import styles from './ProductTable.module.css';
 
 export type PanelProduct = {
@@ -13,6 +13,7 @@ export type PanelProduct = {
   type: ProductType;
   image: string;
   visible: boolean;
+  stock: number;
   updated: string;
 };
 
@@ -30,9 +31,9 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
   // A chave muda na hora; se o banco recusar, volta ao que era
   const [items, setOptimistic] = useOptimistic(
     products,
-    (current, change: { slug: string; visible: boolean }) =>
+    (current, change: Partial<PanelProduct> & { slug: string }) =>
       current.map((item) =>
-        item.slug === change.slug ? { ...item, visible: change.visible } : item,
+        item.slug === change.slug ? { ...item, ...change } : item,
       ),
   );
 
@@ -46,6 +47,8 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
   }, [items, search, type]);
 
   const visibleCount = items.filter((item) => item.visible).length;
+  const stockTotal = items.reduce((sum, item) => sum + item.stock, 0);
+  const outOfStock = items.filter((item) => item.stock === 0).length;
 
   function toggle(item: PanelProduct) {
     setError(null);
@@ -58,6 +61,18 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
     });
   }
 
+  function changeStock(item: PanelProduct, stock: number) {
+    if (!Number.isInteger(stock) || stock < 0 || stock === item.stock) return;
+    setError(null);
+    startTransition(async () => {
+      setOptimistic({ slug: item.slug, stock });
+      const result = await setStock(item.slug, stock);
+      if (!result.ok) {
+        setError(`Não foi possível salvar o estoque do ${item.name}.`);
+      }
+    });
+  }
+
   return (
     <>
       <div className={styles.header}>
@@ -66,6 +81,16 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
           <p className={styles.summary}>
             {items.length} modelos no catálogo · {visibleCount} aparecendo no
             site
+          </p>
+          <p className={styles.summary}>
+            {stockTotal} peças na loja
+            {outOfStock > 0 && (
+              <span className={styles.warn}>
+                {' '}
+                · {outOfStock} {outOfStock === 1 ? 'modelo' : 'modelos'} sem
+                estoque
+              </span>
+            )}
           </p>
         </div>
         <Link href="/painel/vasos/novo" className={styles.primary}>
@@ -140,6 +165,7 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
             <tr>
               <th scope="col">Vaso</th>
               <th scope="col">Tipo</th>
+              <th scope="col">Estoque</th>
               <th scope="col">Aparece no site</th>
               <th scope="col">Última mudança</th>
               <th scope="col" className={styles.right}>
@@ -154,11 +180,26 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
                   <div className={styles.product}>
                     <div className={styles.thumb}>
                       <Image src={item.image} alt="" fill sizes="56px" />
+                      <span
+                        className={styles.badge}
+                        data-empty={item.stock === 0}
+                        title={`${item.stock} na loja`}
+                      >
+                        {item.stock}
+                      </span>
                     </div>
                     <span className={styles.name}>{item.name}</span>
                   </div>
                 </td>
                 <td className={styles.muted}>{typeLabel(item.type)}</td>
+                <td>
+                  <StockStepper
+                    key={item.stock}
+                    name={item.name}
+                    value={item.stock}
+                    onChange={(stock) => changeStock(item, stock)}
+                  />
+                </td>
                 <td>
                   <button
                     type="button"
@@ -197,8 +238,63 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
 
       <p className={styles.note}>
         Mostrando {filtered.length} de {items.length} vasos. Desligar
-        &quot;Aparece no site&quot; esconde o vaso sem apagar.
+        &quot;Aparece no site&quot; esconde o vaso sem apagar. O estoque é só
+        para a loja: não aparece no site.
       </p>
     </>
+  );
+}
+
+// Botões de − e + com o número no meio, que também pode ser digitado
+function StockStepper({
+  name,
+  value,
+  onChange,
+}: {
+  name: string;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  const [draft, setDraft] = useState(String(value));
+
+  function commit() {
+    const next = Number(draft);
+    if (draft.trim() === '' || !Number.isInteger(next) || next < 0) {
+      setDraft(String(value));
+      return;
+    }
+    onChange(next);
+  }
+
+  return (
+    <div className={styles.stepper} data-empty={value === 0}>
+      <button
+        type="button"
+        aria-label={`Tirar 1 do estoque de ${name}`}
+        disabled={value === 0}
+        onClick={() => onChange(value - 1)}
+      >
+        −
+      </button>
+      <input
+        type="number"
+        inputMode="numeric"
+        min={0}
+        aria-label={`Estoque de ${name}`}
+        value={draft}
+        onChange={(event) => setDraft(event.target.value)}
+        onBlur={commit}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') event.currentTarget.blur();
+        }}
+      />
+      <button
+        type="button"
+        aria-label={`Somar 1 ao estoque de ${name}`}
+        onClick={() => onChange(value + 1)}
+      >
+        +
+      </button>
+    </div>
   );
 }

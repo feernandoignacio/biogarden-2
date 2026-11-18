@@ -23,7 +23,7 @@ async function PanelHome() {
     supabase.auth.getUser(),
     supabase
       .from('products')
-      .select('slug, name, type, image_url, visible, updated_at')
+      .select('slug, name, type, image_url, visible, stock, updated_at')
       .order('position'),
   ]);
 
@@ -33,6 +33,7 @@ async function PanelHome() {
     type: row.type as ProductType,
     image: row.image_url,
     visible: row.visible,
+    stock: row.stock,
     updated: relativeDay(row.updated_at),
   }));
 

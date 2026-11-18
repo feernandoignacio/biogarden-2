@@ -1,6 +1,6 @@
 'use server';
 
-import { updateTag } from 'next/cache';
+import { refresh, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { PRODUCTS_TAG } from '@/data/catalog';
 import { createSupabaseServer } from '@/lib/supabase/server';
@@ -52,5 +52,23 @@ export async function setVisibility(slug: string, visible: boolean) {
 
   // O site descarta a lista guardada e busca de novo no banco
   updateTag(PRODUCTS_TAG);
+  return { ok: true };
+}
+
+// Quantidade na loja física. Não aparece no site, então não precisa
+// atualizar o cache das páginas.
+export async function setStock(slug: string, stock: number) {
+  if (!Number.isInteger(stock) || stock < 0 || stock > 99_999) {
+    return { ok: false };
+  }
+  const supabase = await createSupabaseServer();
+  const { error } = await supabase
+    .from('products')
+    .update({ stock })
+    .eq('slug', slug);
+
+  if (error) return { ok: false };
+  // Recarrega os dados do painel para o número novo ficar na tela
+  refresh();
   return { ok: true };
 }
