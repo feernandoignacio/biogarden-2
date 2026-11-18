@@ -19,7 +19,7 @@ export default function LoginPage() {
         <div className={styles.box}>
           <div className={styles.heading}>
             <h1 className={styles.title}>Entrar no painel</h1>
-            <p className={styles.text}>Acesso só para a equipe da Biogarden.</p>
+            <p className={styles.text}>Acesso apenas para equipe Biogarden</p>
           </div>
           <LoginForm />
           <Link href="/" className={styles.back}>
