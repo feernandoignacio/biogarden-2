@@ -81,8 +81,30 @@
 }
 
 .siteLink {
-  color: var(--cream);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: stretch;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--green);
+  text-decoration: none;
   font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.siteLink:hover {
+  background: var(--white);
+}
+
+.siteLink:focus-visible,
+.logout:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 2px;
 }
 
 .user {
@@ -141,6 +163,12 @@
     margin: 0 0 0 auto;
     flex-direction: row;
     align-items: center;
+  }
+
+  .siteLink {
+    align-self: auto;
+    min-height: 38px;
+    padding: 0 14px;
   }
 
   .main {
