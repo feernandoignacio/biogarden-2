@@ -209,19 +209,29 @@
 
 .danger {
   margin-right: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   min-height: 46px;
-  padding: 0 4px;
-  border: 0;
-  background: transparent;
+  padding: 0 20px;
+  border: 1px solid rgb(161 40 29 / 0.35);
+  border-radius: 999px;
+  background: var(--white);
   color: #a1281d;
   font: inherit;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .danger:hover {
-  text-decoration: underline;
+  border-color: #a1281d;
+  background: #a1281d;
+  color: var(--white);
 }
 
 .confirm {
