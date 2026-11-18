@@ -2,13 +2,14 @@ import { connection } from 'next/server';
 import { Suspense } from 'react';
 import type { ProductType } from '@/data/products';
 import { createSupabaseServer } from '@/lib/supabase/server';
+import { PanelLoader } from './_components/PanelLoader';
 import { PanelShell } from './_components/PanelShell';
 import { ProductTable, type PanelProduct } from './_components/ProductTable';
 import styles from './page.module.css';
 
 export default function PanelPage() {
   return (
-    <Suspense fallback={<p className={styles.loading}>Carregando painel...</p>}>
+    <Suspense fallback={<PanelLoader label="Carregando vasos" />}>
       <PanelHome />
     </Suspense>
   );
