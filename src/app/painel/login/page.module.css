@@ -13,8 +13,23 @@
   justify-content: center;
   gap: 20px;
   padding: 64px;
-  background: var(--green);
+  /* Foto da página inicial com uma camada verde por cima, mais forte do
+     lado do texto para ele continuar legível */
+  background:
+    linear-gradient(
+      90deg,
+      rgb(31 53 41 / 0.82) 0%,
+      rgb(31 53 41 / 0.55) 55%,
+      rgb(31 53 41 / 0.25) 100%
+    ),
+    url('/images/hero-plants.webp') center / cover no-repeat,
+    var(--green);
   color: var(--cream);
+}
+
+.name,
+.tagline {
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.35);
 }
 
 .name {
@@ -29,7 +44,7 @@
   font-family: var(--font-title);
   font-size: 1.375rem;
   line-height: 1.5;
-  color: #e3e8df;
+  color: var(--cream);
 }
 
 .main {
@@ -142,8 +157,10 @@
     flex-direction: column;
   }
 
+  /* No celular a faixa do topo fica só verde, sem a foto */
   .brand {
     flex: none;
+    background: var(--green);
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
