@@ -7,9 +7,27 @@ import { useEffect, useRef, useState } from 'react';
 import { signOut } from '../actions';
 import styles from './PanelShell.module.css';
 
-// Categorias do menu. Quando entrarem novas (adubo, terra, jardim...),
-// é só acrescentar aqui que elas aparecem na lista.
-const SECTIONS = [{ href: '/painel', label: 'Vasos', icon: 'vaso' as const }];
+// Itens do menu. Quando entrarem novas categorias (adubo, terra,
+// jardim...), é só acrescentar aqui que elas aparecem na lista.
+const SECTIONS = [
+  { href: '/painel', label: 'Vasos', icon: 'vaso', showCount: true },
+  { href: '/painel/estatisticas', label: 'Estatísticas', icon: 'grafico' },
+] as const;
+
+const ICONS = {
+  vaso: (
+    <>
+      <path d="M6 8h12l-1.5 12h-9z" />
+      <path d="M5 8h14" />
+      <path d="M12 8c0-3 1-5 4-5" />
+    </>
+  ),
+  grafico: (
+    <>
+      <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+    </>
+  ),
+};
 
 // Logo + menu de categorias. No computador o menu fica sempre aberto na
 // barra lateral; no celular ele desce ao tocar na logo.
@@ -110,12 +128,12 @@ export function PanelNav({ total, email }: { total: number; email: string }) {
                 strokeWidth="1.8"
                 aria-hidden="true"
               >
-                <path d="M6 8h12l-1.5 12h-9z" />
-                <path d="M5 8h14" />
-                <path d="M12 8c0-3 1-5 4-5" />
+                {ICONS[section.icon]}
               </svg>
               {section.label}
-              <span className={styles.count}>{total}</span>
+              {'showCount' in section && (
+                <span className={styles.count}>{total}</span>
+              )}
             </Link>
           );
         })}

@@ -6,6 +6,7 @@ import { Header } from '@/components/Header';
 import { PageFade } from '@/components/PageFade';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { SiteOnly } from '@/components/SiteOnly';
+import { VisitTracker } from '@/components/VisitTracker';
 import { WhatsappFloat } from '@/components/WhatsappFloat';
 import { SITE_URL } from '@/data/site';
 import './globals.css';
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             <Footer />
             <WhatsappFloat />
             <ScrollReveal />
+            <VisitTracker />
           </SiteOnly>
         </Suspense>
       </body>
