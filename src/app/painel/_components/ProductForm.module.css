@@ -1,0 +1,277 @@
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.card {
+  flex: 999 1 520px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+  border: 1px solid rgb(43 71 57 / 0.12);
+  border-radius: 16px;
+  background: var(--white);
+}
+
+.label,
+.field,
+.checkTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--green);
+}
+
+.photoBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.photoRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.photo,
+.previewPhoto {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--cream-card);
+  color: #9aa394;
+}
+
+.photo {
+  flex-shrink: 0;
+  width: 150px;
+  height: 150px;
+}
+
+.photo img,
+.previewPhoto img {
+  padding: 16px;
+  object-fit: contain;
+}
+
+.photoNote {
+  flex: 1 1 240px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 0 14px;
+  border: 1px solid rgb(43 71 57 / 0.25);
+  border-radius: 10px;
+  background: var(--white);
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.field input,
+.field select {
+  height: 46px;
+}
+
+.field textarea {
+  padding: 12px 14px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible,
+.check input:focus-visible,
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 1px;
+}
+
+.hint {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-soft);
+}
+
+.check {
+  align-self: end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 12px 16px;
+  border: 1px solid rgb(43 71 57 / 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.check > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--green);
+}
+
+.check[data-disabled='true'] {
+  background: var(--cream-soft);
+  cursor: not-allowed;
+}
+
+.check[data-disabled='true'] .checkTitle {
+  color: #9aa394;
+}
+
+.error {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fbeaea;
+  color: #8a2c2c;
+  font-size: 0.875rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgb(43 71 57 / 0.1);
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.primary {
+  border: 0;
+  background: var(--green);
+  color: var(--cream);
+}
+
+.primary:hover {
+  background: var(--green-dark);
+}
+
+.primary:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.secondary {
+  border: 1px solid rgb(43 71 57 / 0.3);
+  color: var(--green);
+}
+
+.secondary:hover {
+  background: var(--cream-soft);
+}
+
+.preview {
+  flex: 1 1 260px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.previewTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-soft);
+}
+
+.previewCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid rgb(43 71 57 / 0.12);
+  border-radius: 16px;
+  background: var(--white);
+}
+
+.previewPhoto {
+  aspect-ratio: 1;
+  margin-bottom: 8px;
+  border-radius: 14px;
+}
+
+.previewPhoto img {
+  padding: 18%;
+}
+
+.previewType {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #6b7466;
+}
+
+.previewName {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  color: var(--green);
+  overflow-wrap: anywhere;
+}
+
+.previewNote {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 20px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .actions > * {
+    flex: 1;
+    justify-content: center;
+  }
+}

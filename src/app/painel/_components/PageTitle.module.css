@@ -1,0 +1,25 @@
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trail {
+  font-size: 0.875rem;
+  color: var(--text-soft);
+}
+
+.trail a {
+  color: var(--text-soft);
+}
+
+.trail a:hover {
+  color: var(--green);
+}
+
+.title {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: 2.1rem;
+  color: var(--green);
+}

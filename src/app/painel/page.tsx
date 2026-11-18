@@ -1,26 +1,27 @@
-import { connection } from 'next/server';
 import { Suspense } from 'react';
 import type { ProductType } from '@/data/products';
-import { createSupabaseServer } from '@/lib/supabase/server';
+import { getPanelContext } from './_lib';
 import { PanelLoader } from './_components/PanelLoader';
 import { PanelShell } from './_components/PanelShell';
 import { ProductTable, type PanelProduct } from './_components/ProductTable';
 import styles from './page.module.css';
 
-export default function PanelPage() {
+export default function PanelPage({ searchParams }: PageProps<'/painel'>) {
   return (
     <Suspense fallback={<PanelLoader label="Carregando vasos" />}>
-      <PanelHome />
+      <PanelHome searchParams={searchParams} />
     </Suspense>
   );
 }
 
-async function PanelHome() {
-  // Sempre na hora: os dados dependem de quem está logado
-  await connection();
-  const supabase = await createSupabaseServer();
-  const [{ data: auth }, { data, error }] = await Promise.all([
-    supabase.auth.getUser(),
+async function PanelHome({
+  searchParams,
+}: {
+  searchParams: PageProps<'/painel'>['searchParams'];
+}) {
+  const { supabase, email } = await getPanelContext();
+  const [{ salvo }, { data, error }] = await Promise.all([
+    searchParams,
     supabase
       .from('products')
       .select('slug, name, type, image_url, visible, stock, updated_at')
@@ -38,13 +39,16 @@ async function PanelHome() {
   }));
 
   return (
-    <PanelShell email={auth.user?.email ?? ''} total={products.length}>
+    <PanelShell email={email} total={products.length}>
       {error ? (
         <p className={styles.loading}>
           Não foi possível carregar os vasos. Atualize a página.
         </p>
       ) : (
-        <ProductTable products={products} />
+        <ProductTable
+          products={products}
+          saved={typeof salvo === 'string' ? salvo : null}
+        />
       )}
     </PanelShell>
   );

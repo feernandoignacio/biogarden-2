@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Footer } from '@/components/Footer';
@@ -54,15 +55,19 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     >
       <body>
         {/* Cabeçalho, rodapé e botão do WhatsApp ficam aqui, iguais em todas as páginas do site (no painel não aparecem) */}
-        <SiteOnly>
-          <Header />
-        </SiteOnly>
-        <PageFade>{children}</PageFade>
-        <SiteOnly>
-          <Footer />
-          <WhatsappFloat />
-          <ScrollReveal />
-        </SiteOnly>
+        {/* Suspense: em páginas do painel com endereço variável, o caminho
+            só é conhecido na hora do acesso */}
+        <Suspense>
+          <SiteOnly>
+            <Header />
+          </SiteOnly>
+          <PageFade>{children}</PageFade>
+          <SiteOnly>
+            <Footer />
+            <WhatsappFloat />
+            <ScrollReveal />
+          </SiteOnly>
+        </Suspense>
       </body>
     </html>
   );

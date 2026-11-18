@@ -11,7 +11,7 @@ export type PanelProduct = {
   slug: string;
   name: string;
   type: ProductType;
-  image: string;
+  image: string | null;
   visible: boolean;
   stock: number;
   updated: string;
@@ -22,7 +22,13 @@ function normalize(text: string) {
   return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
-export function ProductTable({ products }: { products: PanelProduct[] }) {
+export function ProductTable({
+  products,
+  saved,
+}: {
+  products: PanelProduct[];
+  saved: string | null;
+}) {
   const [search, setSearch] = useState('');
   const [type, setType] = useState<ProductType | 'todos'>('todos');
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +55,7 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
   const visibleCount = items.filter((item) => item.visible).length;
   const stockTotal = items.reduce((sum, item) => sum + item.stock, 0);
   const outOfStock = items.filter((item) => item.stock === 0).length;
+  const noPhoto = items.filter((item) => !item.image).length;
 
   function toggle(item: PanelProduct) {
     setError(null);
@@ -91,6 +98,9 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
                 estoque
               </span>
             )}
+            {noPhoto > 0 && (
+              <span className={styles.warn}> · {noPhoto} aguardando foto</span>
+            )}
           </p>
         </div>
         <Link href="/painel/vasos/novo" className={styles.primary}>
@@ -105,7 +115,7 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
           >
             <path d="M12 5v14M5 12h14" />
           </svg>
-          Novo vaso
+          Novo item
         </Link>
       </div>
 
@@ -153,6 +163,12 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
         </div>
       </div>
 
+      {saved && !error && (
+        <p className={styles.saved} role="status">
+          &quot;{saved}&quot; foi salvo.
+        </p>
+      )}
+
       {error && (
         <p className={styles.error} role="alert">
           {error}
@@ -179,7 +195,24 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
                 <td>
                   <div className={styles.product}>
                     <div className={styles.thumb}>
-                      <Image src={item.image} alt="" fill sizes="56px" />
+                      {item.image ? (
+                        <Image src={item.image} alt="" fill sizes="56px" />
+                      ) : (
+                        <svg
+                          className={styles.noPhoto}
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          aria-label="Sem foto"
+                        >
+                          <rect x="3" y="5" width="18" height="14" rx="2" />
+                          <circle cx="9" cy="10" r="1.6" />
+                          <path d="m3 17 5-5 4 4 3-3 6 6" />
+                        </svg>
+                      )}
                       <span
                         className={styles.badge}
                         data-empty={item.stock === 0}
@@ -207,12 +240,20 @@ export function ProductTable({ products }: { products: PanelProduct[] }) {
                     aria-checked={item.visible}
                     aria-label={`Mostrar ${item.name} no site`}
                     className={styles.switch}
+                    disabled={!item.image}
+                    title={item.image ? undefined : 'Aguardando foto'}
                     onClick={() => toggle(item)}
                   >
                     <span className={styles.track}>
                       <span className={styles.knob} />
                     </span>
-                    <span>{item.visible ? 'Sim' : 'Oculto'}</span>
+                    <span>
+                      {!item.image
+                        ? 'Aguardando foto'
+                        : item.visible
+                          ? 'Sim'
+                          : 'Oculto'}
+                    </span>
                   </button>
                 </td>
                 <td className={styles.muted}>{item.updated}</td>

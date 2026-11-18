@@ -128,6 +128,15 @@
   color: var(--cream);
 }
 
+.saved {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #e7f0e9;
+  color: var(--green);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
 .error {
   padding: 10px 14px;
   border-radius: 10px;
@@ -262,6 +271,22 @@ tr[data-hidden='true'] .name {
   border-radius: 50%;
   background: var(--white);
   transition: transform 0.2s ease;
+}
+
+.switch:disabled {
+  color: var(--text-soft);
+  cursor: not-allowed;
+}
+
+.switch:disabled .track {
+  opacity: 0.5;
+}
+
+.noPhoto {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  color: #9aa394;
 }
 
 .switch[aria-checked='true'] .track {
