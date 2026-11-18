@@ -44,7 +44,7 @@ export function PanelNav({ total, email }: { total: number; email: string }) {
 
   const brand = (
     <>
-      <Image src="/images/logo.png" alt="" width={34} height={34} />
+      <Image src="/images/logo.png" alt="" width={27} height={27} />
       <span className={styles.brandText}>
         <span className={styles.brandName}>Biogarden</span>
         <span className={styles.brandSub}>Painel do site</span>
