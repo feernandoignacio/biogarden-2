@@ -45,10 +45,16 @@ export function ProductTable({
 
   const filtered = useMemo(() => {
     const term = normalize(search.trim());
-    return items.filter(
-      (item) =>
-        (type === 'todos' || item.type === type) &&
-        normalize(item.name).includes(term),
+    return (
+      items
+        .filter(
+          (item) =>
+            (type === 'todos' || item.type === type) &&
+            normalize(item.name).includes(term),
+        )
+        // Os que não aparecem no site vão para o fim da lista, mantendo a
+        // ordem do catálogo entre eles
+        .sort((a, b) => Number(b.visible) - Number(a.visible))
     );
   }, [items, search, type]);
 
