@@ -178,3 +178,22 @@ function uniqueSlug(name: string, taken: Set<string>) {
   for (let n = 2; taken.has(slug); n++) slug = `${base}-${n}`;
   return slug;
 }
+
+// Apaga um item provisório (sem foto, que ainda não passou pelo
+// desenvolvedor). Itens com foto não podem ser apagados: o banco recusa.
+export async function deleteDraft(slug: string) {
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('products')
+    .delete()
+    .eq('slug', slug)
+    .is('image_url', null)
+    .select('name');
+
+  if (error || !data?.length) {
+    return { error: 'Não foi possível apagar este item.' };
+  }
+
+  updateTag(PRODUCTS_TAG);
+  redirect(`/painel?apagado=${encodeURIComponent(data[0].name)}`);
+}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useActionState, useState } from 'react';
 import { PRODUCT_TYPES, typeLabel, type ProductType } from '@/data/products';
 import { saveProduct, type ProductFormState } from '../actions';
+import { DeleteDraft } from './DeleteDraft';
 import styles from './ProductForm.module.css';
 
 export type EditableProduct = {
@@ -156,6 +157,9 @@ export function ProductForm({ product }: { product?: EditableProduct }) {
         )}
 
         <div className={styles.actions}>
+          {!isNew && !initial.image && (
+            <DeleteDraft slug={initial.slug} name={initial.name} />
+          )}
           <Link href="/painel" className={styles.secondary}>
             Cancelar
           </Link>

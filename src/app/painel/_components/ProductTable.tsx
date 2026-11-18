@@ -24,10 +24,10 @@ function normalize(text: string) {
 
 export function ProductTable({
   products,
-  saved,
+  notice,
 }: {
   products: PanelProduct[];
-  saved: string | null;
+  notice: string | null;
 }) {
   const [search, setSearch] = useState('');
   const [type, setType] = useState<ProductType | 'todos'>('todos');
@@ -105,7 +105,11 @@ export function ProductTable({
               </span>
             )}
             {noPhoto > 0 && (
-              <span className={styles.warn}> · {noPhoto} aguardando foto</span>
+              <span className={styles.warn}>
+                {' '}
+                · {noPhoto} {noPhoto === 1 ? 'provisório' : 'provisórios'} sem
+                foto
+              </span>
             )}
           </p>
         </div>
@@ -169,9 +173,9 @@ export function ProductTable({
         </div>
       </div>
 
-      {saved && !error && (
+      {notice && !error && (
         <p className={styles.saved} role="status">
-          &quot;{saved}&quot; foi salvo.
+          {notice}
         </p>
       )}
 
@@ -255,7 +259,7 @@ export function ProductTable({
                     </span>
                     <span>
                       {!item.image
-                        ? 'Aguardando foto'
+                        ? 'Provisório, sem foto'
                         : item.visible
                           ? 'Sim'
                           : 'Oculto'}

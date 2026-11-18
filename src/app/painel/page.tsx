@@ -20,7 +20,7 @@ async function PanelHome({
   searchParams: PageProps<'/painel'>['searchParams'];
 }) {
   const { supabase, email } = await getPanelContext();
-  const [{ salvo }, { data, error }] = await Promise.all([
+  const [{ salvo, apagado }, { data, error }] = await Promise.all([
     searchParams,
     supabase
       .from('products')
@@ -47,7 +47,13 @@ async function PanelHome({
       ) : (
         <ProductTable
           products={products}
-          saved={typeof salvo === 'string' ? salvo : null}
+          notice={
+            typeof salvo === 'string'
+              ? `"${salvo}" foi salvo.`
+              : typeof apagado === 'string'
+                ? `"${apagado}" foi apagado.`
+                : null
+          }
         />
       )}
     </PanelShell>

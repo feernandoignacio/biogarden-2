@@ -207,6 +207,73 @@
   background: var(--cream-soft);
 }
 
+.danger {
+  margin-right: auto;
+  min-height: 46px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: #a1281d;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.danger:hover {
+  text-decoration: underline;
+}
+
+.confirm {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid rgb(161 40 29 / 0.25);
+  border-radius: 12px;
+  background: #fbeaea;
+  color: #6e1d16;
+  font-size: 0.9rem;
+}
+
+.confirmError {
+  font-weight: 500;
+}
+
+.confirmActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.dangerSolid {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #a1281d;
+  color: var(--white);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dangerSolid:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.danger:focus-visible,
+.dangerSolid:focus-visible {
+  outline: 2px solid #a1281d;
+  outline-offset: 2px;
+}
+
 .preview {
   flex: 1 1 260px;
   max-width: 340px;
