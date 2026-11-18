@@ -1,86 +1,118 @@
+/* Tela dividida: marca em verde à esquerda, formulário à direita.
+   No celular a parte verde vira uma faixa no topo. */
 .page {
   min-height: 100vh;
-  display: grid;
-  place-content: center;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.brand {
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: 20px;
-  padding: 24px;
-}
-
-.card {
-  width: min(400px, 100%);
-  padding: 40px 32px 32px;
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: 0 12px 40px rgb(31 53 41 / 0.12);
-  text-align: center;
-}
-
-.logo {
-  margin: 0 auto 12px;
+  padding: 64px;
   background: var(--green);
-  border-radius: 50%;
-  padding: 8px;
+  color: var(--cream);
+}
+
+.name {
+  font-family: var(--font-brand);
+  font-size: 3.25rem;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.tagline {
+  max-width: 380px;
+  font-family: var(--font-title);
+  font-size: 1.375rem;
+  line-height: 1.5;
+  color: #e3e8df;
+}
+
+.main {
+  flex: 1 1 420px;
+  display: grid;
+  place-items: center;
+  padding: 48px 24px;
+}
+
+.box {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .title {
   font-family: var(--font-title);
-  font-size: 1.7rem;
   font-weight: 400;
-  color: var(--green-dark);
+  font-size: 2rem;
+  color: var(--green);
 }
 
 .text {
-  margin-top: 6px;
   color: var(--text-soft);
+  font-size: 0.94rem;
 }
 
 .form {
-  display: grid;
-  gap: 16px;
-  margin-top: 28px;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .field {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text);
+  color: var(--green);
 }
 
 .field input {
-  padding: 12px 14px;
-  font: inherit;
-  font-weight: 400;
-  border: 1px solid var(--sage);
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid rgb(43 71 57 / 0.25);
   border-radius: 10px;
-  background: var(--cream-soft);
+  background: var(--white);
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 400;
+  color: var(--text);
 }
 
 .field input:focus-visible {
   outline: 2px solid var(--green);
   outline-offset: 1px;
-  border-color: var(--green);
 }
 
 .error {
-  padding: 10px 12px;
+  padding: 10px 14px;
   border-radius: 10px;
   background: #fbeaea;
   color: #8a2c2c;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 .submit {
-  margin-top: 4px;
-  padding: 13px;
+  min-height: 50px;
   border: 0;
   border-radius: 999px;
   background: var(--green);
   color: var(--cream);
   font: inherit;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -96,6 +128,47 @@
 }
 
 .back {
+  align-self: center;
   color: var(--text-soft);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+}
+
+.back:hover {
+  color: var(--green);
+}
+
+@media (max-width: 860px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .brand {
+    flex: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 14px;
+    padding: 24px;
+  }
+
+  .brand img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .name {
+    font-size: 2rem;
+  }
+
+  .tagline {
+    flex-basis: 100%;
+    font-size: 1rem;
+  }
+
+  .main {
+    flex: 1;
+    place-items: start center;
+    padding: 36px 24px 48px;
+  }
 }
