@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { PanelCategory } from '../_categories';
 import { signOut } from '../actions';
 import { PanelNav } from './PanelNav';
@@ -42,6 +43,9 @@ export function PanelShell({ email, categories, active, children }: Props) {
             </svg>
           </a>
           <span className={styles.user}>Conectado como {email}</span>
+          <Link href="/painel/senha" className={styles.passwordLink}>
+            Trocar senha
+          </Link>
           <form action={signOut}>
             <button type="submit" className={styles.logout}>
               Sair

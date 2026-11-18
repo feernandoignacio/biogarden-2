@@ -5,7 +5,11 @@ import { PanelShell } from './PanelShell';
 import { ProductTable, type PanelProduct } from './ProductTable';
 import styles from './CategoryList.module.css';
 
-type Notice = { salvo?: string | string[]; apagado?: string | string[] };
+type Notice = {
+  salvo?: string | string[];
+  apagado?: string | string[];
+  senha?: string | string[];
+};
 
 // Lista de itens de uma categoria (Vasos, Adubos, Jardim...)
 export async function CategoryList({
@@ -19,7 +23,7 @@ export async function CategoryList({
   const category = categories.find((item) => item.slug === slug);
   if (!category) notFound();
 
-  const [{ salvo, apagado }, { data, error }] = await Promise.all([
+  const [{ salvo, apagado, senha }, { data, error }] = await Promise.all([
     searchParams,
     supabase
       .from('products')
@@ -53,7 +57,9 @@ export async function CategoryList({
               ? `"${salvo}" foi salvo.`
               : typeof apagado === 'string'
                 ? `"${apagado}" foi apagado.`
-                : null
+                : senha
+                  ? 'Senha trocada. Use a nova no próximo login.'
+                  : null
           }
         />
       )}

@@ -216,3 +216,54 @@ export async function deleteDraft(slug: string) {
     `${categoryHref(data[0].category)}?apagado=${encodeURIComponent(data[0].name)}`,
   );
 }
+
+export type PasswordState = { error: string | null };
+
+// Troca a senha do dono. Pede a senha atual antes, para ninguém trocar
+// a senha de um celular esquecido aberto no painel.
+export async function changePassword(
+  _previous: PasswordState,
+  formData: FormData,
+): Promise<PasswordState> {
+  const current = String(formData.get('current') ?? '');
+  const next = String(formData.get('next') ?? '');
+  const confirm = String(formData.get('confirm') ?? '');
+
+  if (!current || !next || !confirm) {
+    return { error: 'Preencha os três campos.' };
+  }
+  if (next.length < 8) {
+    return { error: 'A senha nova precisa ter pelo menos 8 caracteres.' };
+  }
+  if (next !== confirm) {
+    return { error: 'A confirmação não é igual à senha nova.' };
+  }
+  if (next === current) {
+    return { error: 'A senha nova precisa ser diferente da atual.' };
+  }
+
+  const supabase = await createSupabaseServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user?.email) redirect('/painel/login');
+
+  // Confere a senha atual
+  const { error: wrong } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password: current,
+  });
+  if (wrong) return { error: 'A senha atual está incorreta.' };
+
+  const { error } = await supabase.auth.updateUser({ password: next });
+  if (error) {
+    return {
+      error:
+        error.code === 'weak_password'
+          ? 'Essa senha é fraca. Use letras e números.'
+          : 'Não foi possível trocar a senha. Tente de novo.',
+    };
+  }
+
+  redirect('/painel?senha=1');
+}

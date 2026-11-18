@@ -1,0 +1,8 @@
+.card {
+  max-width: 520px;
+}
+
+.intro {
+  font-size: 0.94rem;
+  color: var(--text-soft);
+}

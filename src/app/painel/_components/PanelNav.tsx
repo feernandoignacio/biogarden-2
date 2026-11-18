@@ -183,6 +183,21 @@ export function PanelNav({
             </svg>
             Ver o site no ar
           </a>
+          <Link href="/painel/senha" className={styles.menuLink}>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              aria-hidden="true"
+            >
+              <rect x="5" y="11" width="14" height="9" rx="2" />
+              <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+            </svg>
+            Trocar senha
+          </Link>
           <form action={signOut}>
             <button type="submit" className={styles.menuLink}>
               <svg

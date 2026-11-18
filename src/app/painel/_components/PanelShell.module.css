@@ -124,6 +124,15 @@
   overflow-wrap: anywhere;
 }
 
+.passwordLink {
+  color: #c9d1c2;
+  font-size: 0.8rem;
+}
+
+.passwordLink:hover {
+  color: var(--cream);
+}
+
 .logout {
   padding: 8px 18px;
   border: 1px solid rgb(246 239 221 / 0.4);
