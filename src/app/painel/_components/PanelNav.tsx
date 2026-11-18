@@ -5,14 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { signOut } from '../actions';
+import { categoryHref, type PanelCategory } from '../_categories';
 import styles from './PanelShell.module.css';
-
-// Itens do menu. Quando entrarem novas categorias (adubo, terra,
-// jardim...), é só acrescentar aqui que elas aparecem na lista.
-const SECTIONS = [
-  { href: '/painel', label: 'Vasos', icon: 'vaso', showCount: true },
-  { href: '/painel/estatisticas', label: 'Estatísticas', icon: 'grafico' },
-] as const;
 
 const ICONS = {
   vaso: (
@@ -27,11 +21,45 @@ const ICONS = {
       <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
     </>
   ),
+  // Ícone das categorias da loja (saco de produto)
+  loja: (
+    <>
+      <path d="M6 7h12l1 13H5z" />
+      <path d="M9 7V5a3 3 0 0 1 6 0v2" />
+    </>
+  ),
 };
 
 // Logo + menu de categorias. No computador o menu fica sempre aberto na
 // barra lateral; no celular ele desce ao tocar na logo.
-export function PanelNav({ total, email }: { total: number; email: string }) {
+export function PanelNav({
+  categories,
+  active,
+  email,
+}: {
+  categories: PanelCategory[];
+  active: string;
+  email: string;
+}) {
+  // Uma linha por categoria (as novas entram sozinhas, vindas do banco)
+  // e as Estatísticas no fim
+  const items = [
+    ...categories.map((category) => ({
+      key: category.slug,
+      href: categoryHref(category.slug),
+      label: category.name,
+      icon: category.slug === 'vasos' ? ('vaso' as const) : ('loja' as const),
+      count: category.count as number | null,
+    })),
+    {
+      key: 'estatisticas',
+      href: '/painel/estatisticas',
+      label: 'Estatísticas',
+      icon: 'grafico' as const,
+      count: null,
+    },
+  ];
+
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [lastPath, setLastPath] = useState(pathname);
@@ -107,36 +135,30 @@ export function PanelNav({ total, email }: { total: number; email: string }) {
         className={styles.nav}
         data-open={open}
       >
-        {SECTIONS.map((section) => {
-          const current =
-            pathname === section.href ||
-            (section.href === '/painel' &&
-              pathname.startsWith('/painel/vasos'));
-          return (
-            <Link
-              key={section.href}
-              href={section.href}
-              aria-current={current ? 'page' : undefined}
-              className={styles.navLink}
+        {items.map((item) => (
+          <Link
+            key={item.key}
+            href={item.href}
+            aria-current={item.key === active ? 'page' : undefined}
+            className={styles.navLink}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              aria-hidden="true"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                aria-hidden="true"
-              >
-                {ICONS[section.icon]}
-              </svg>
-              {section.label}
-              {'showCount' in section && (
-                <span className={styles.count}>{total}</span>
-              )}
-            </Link>
-          );
-        })}
+              {ICONS[item.icon]}
+            </svg>
+            {item.label}
+            {item.count !== null && (
+              <span className={styles.count}>{item.count}</span>
+            )}
+          </Link>
+        ))}
 
         {/* Só no celular: no computador estes ficam no pé da barra lateral */}
         <div className={styles.menuExtras}>

@@ -4,6 +4,7 @@ import { refresh, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { PRODUCTS_TAG } from '@/data/catalog';
 import { PRODUCT_TYPES, type ProductType } from '@/data/products';
+import { categoryHref, SITE_CATEGORY } from './_categories';
 import { createSupabaseServer } from '@/lib/supabase/server';
 
 export type LoginState = { error: string | null; email: string };
@@ -95,13 +96,16 @@ export async function saveProduct(
     description: String(formData.get('description') ?? '').trim(),
     stock: String(formData.get('stock') ?? '0').trim(),
     visible: formData.get('visible') === 'on' ? 'on' : '',
+    category: String(formData.get('category') ?? SITE_CATEGORY),
   };
   const stock = Number(fields.stock);
+  // Só os vasos têm tipo e podem aparecer no site
+  const isSite = fields.category === SITE_CATEGORY;
 
   if (fields.name.length < 2 || fields.name.length > 80) {
     return { error: 'O nome precisa ter entre 2 e 80 letras.', fields };
   }
-  if (!TYPES.includes(fields.type as ProductType)) {
+  if (isSite && !TYPES.includes(fields.type as ProductType)) {
     return { error: 'Escolha um tipo.', fields };
   }
   if (fields.description.length > 600) {
@@ -115,9 +119,16 @@ export async function saveProduct(
   }
 
   const supabase = await createSupabaseServer();
+  const { data: category } = await supabase
+    .from('categories')
+    .select('slug')
+    .eq('slug', fields.category)
+    .maybeSingle();
+  if (!category) return { error: 'Categoria não encontrada.', fields };
+
   const values = {
     name: fields.name,
-    type: fields.type,
+    type: isSite ? fields.type : null,
     description: fields.description,
     stock,
   };
@@ -125,17 +136,20 @@ export async function saveProduct(
   if (slug) {
     const { data: current } = await supabase
       .from('products')
-      .select('image_url')
+      .select('image_url, category')
       .eq('slug', slug)
       .maybeSingle();
     if (!current) return { error: 'Esse item não existe mais.', fields };
+    if (current.category !== fields.category) {
+      return { error: 'Esse item é de outra categoria.', fields };
+    }
 
     const { error } = await supabase
       .from('products')
       .update({
         ...values,
-        // Sem foto, o item continua fora do site
-        visible: current.image_url ? fields.visible === 'on' : false,
+        // Sem foto (ou fora da categoria Vasos), o item fica fora do site
+        visible: isSite && current.image_url ? fields.visible === 'on' : false,
       })
       .eq('slug', slug);
     if (error)
@@ -153,6 +167,7 @@ export async function saveProduct(
     const { error } = await supabase.from('products').insert({
       ...values,
       slug: uniqueSlug(fields.name, taken),
+      category: fields.category,
       visible: false,
       position: lastPosition + 10,
     });
@@ -161,7 +176,9 @@ export async function saveProduct(
   }
 
   updateTag(PRODUCTS_TAG);
-  redirect(`/painel?salvo=${encodeURIComponent(fields.name)}`);
+  redirect(
+    `${categoryHref(fields.category)}?salvo=${encodeURIComponent(fields.name)}`,
+  );
 }
 
 // "São Marino com Alça" vira "sao-marino-com-alca"; se já existir, ganha -2
@@ -188,12 +205,14 @@ export async function deleteDraft(slug: string) {
     .delete()
     .eq('slug', slug)
     .is('image_url', null)
-    .select('name');
+    .select('name, category');
 
   if (error || !data?.length) {
     return { error: 'Não foi possível apagar este item.' };
   }
 
   updateTag(PRODUCTS_TAG);
-  redirect(`/painel?apagado=${encodeURIComponent(data[0].name)}`);
+  redirect(
+    `${categoryHref(data[0].category)}?apagado=${encodeURIComponent(data[0].name)}`,
+  );
 }

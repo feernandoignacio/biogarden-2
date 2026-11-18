@@ -4,13 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useOptimistic, useState, useTransition } from 'react';
 import { PRODUCT_TYPES, typeLabel, type ProductType } from '@/data/products';
+import { SITE_CATEGORY } from '../_categories';
 import { setStock, setVisibility } from '../actions';
 import styles from './ProductTable.module.css';
 
 export type PanelProduct = {
   slug: string;
   name: string;
-  type: ProductType;
+  type: ProductType | null;
   image: string | null;
   visible: boolean;
   stock: number;
@@ -23,12 +24,19 @@ function normalize(text: string) {
 }
 
 export function ProductTable({
+  category,
   products,
   notice,
 }: {
+  category: { slug: string; name: string };
   products: PanelProduct[];
   notice: string | null;
 }) {
+  // Vasos aparecem no site e têm tipo; as outras categorias são só da loja
+  const isSite = category.slug === SITE_CATEGORY;
+  const newHref = isSite
+    ? '/painel/vasos/novo'
+    : `/painel/vasos/novo?categoria=${category.slug}`;
   const [search, setSearch] = useState('');
   const [type, setType] = useState<ProductType | 'todos'>('todos');
   const [error, setError] = useState<string | null>(null);
@@ -90,10 +98,11 @@ export function ProductTable({
     <>
       <div className={styles.header}>
         <div className={styles.heading}>
-          <h1 className={styles.title}>Vasos</h1>
+          <h1 className={styles.title}>{category.name}</h1>
           <p className={styles.summary}>
-            {items.length} modelos no catálogo · {visibleCount} aparecendo no
-            site
+            {isSite
+              ? `${items.length} modelos no catálogo · ${visibleCount} aparecendo no site`
+              : `${items.length} ${items.length === 1 ? 'item' : 'itens'} · só no controle da loja`}
           </p>
           <p className={styles.summary}>
             {stockTotal} peças na loja
@@ -104,7 +113,7 @@ export function ProductTable({
                 estoque
               </span>
             )}
-            {noPhoto > 0 && (
+            {isSite && noPhoto > 0 && (
               <span className={styles.warn}>
                 {' '}
                 · {noPhoto} {noPhoto === 1 ? 'provisório' : 'provisórios'} sem
@@ -113,7 +122,7 @@ export function ProductTable({
             )}
           </p>
         </div>
-        <Link href="/painel/vasos/novo" className={styles.primary}>
+        <Link href={newHref} className={styles.primary}>
           <svg
             width="18"
             height="18"
@@ -152,13 +161,16 @@ export function ProductTable({
           />
         </label>
 
-        <div
-          className={styles.chips}
-          role="group"
-          aria-label="Filtrar por tipo"
-        >
-          {[{ value: 'todos' as const, label: 'Todos' }, ...PRODUCT_TYPES].map(
-            (option) => (
+        {isSite && (
+          <div
+            className={styles.chips}
+            role="group"
+            aria-label="Filtrar por tipo"
+          >
+            {[
+              { value: 'todos' as const, label: 'Todos' },
+              ...PRODUCT_TYPES,
+            ].map((option) => (
               <button
                 key={option.value}
                 type="button"
@@ -168,9 +180,9 @@ export function ProductTable({
               >
                 {option.label}
               </button>
-            ),
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {notice && !error && (
@@ -189,10 +201,10 @@ export function ProductTable({
         <table className={styles.table}>
           <thead>
             <tr>
-              <th scope="col">Vaso</th>
-              <th scope="col">Tipo</th>
+              <th scope="col">{isSite ? 'Vaso' : 'Item'}</th>
+              {isSite && <th scope="col">Tipo</th>}
               <th scope="col">Estoque</th>
-              <th scope="col">Aparece no site</th>
+              {isSite && <th scope="col">Aparece no site</th>}
               <th scope="col">Última mudança</th>
               <th scope="col" className={styles.right}>
                 Ações
@@ -208,7 +220,11 @@ export function ProductTable({
                     <span className={styles.name}>{item.name}</span>
                   </div>
                 </td>
-                <td className={styles.muted}>{typeLabel(item.type)}</td>
+                {isSite && (
+                  <td className={styles.muted}>
+                    {item.type && typeLabel(item.type)}
+                  </td>
+                )}
                 <td>
                   <StockStepper
                     key={item.stock}
@@ -217,9 +233,11 @@ export function ProductTable({
                     onChange={(stock) => changeStock(item, stock)}
                   />
                 </td>
-                <td>
-                  <SiteSwitch item={item} onToggle={() => toggle(item)} />
-                </td>
+                {isSite && (
+                  <td>
+                    <SiteSwitch item={item} onToggle={() => toggle(item)} />
+                  </td>
+                )}
                 <td className={styles.muted}>{item.updated}</td>
                 <td className={styles.right}>
                   <Link
@@ -247,7 +265,8 @@ export function ProductTable({
                 <div className={styles.cardText}>
                   <span className={styles.name}>{item.name}</span>
                   <span className={styles.cardMeta}>
-                    {typeLabel(item.type)} · {item.updated}
+                    {item.type ? `${typeLabel(item.type)} · ` : ''}
+                    {item.updated}
                   </span>
                 </div>
                 <Link
@@ -275,7 +294,9 @@ export function ProductTable({
                   value={item.stock}
                   onChange={(stock) => changeStock(item, stock)}
                 />
-                <SiteSwitch item={item} onToggle={() => toggle(item)} />
+                {isSite && (
+                  <SiteSwitch item={item} onToggle={() => toggle(item)} />
+                )}
               </div>
             </li>
           ))}
@@ -283,16 +304,14 @@ export function ProductTable({
 
         {filtered.length === 0 && (
           <p className={styles.empty}>
-            Nenhum vaso encontrado com esse filtro.
+            {items.length === 0
+              ? 'Nenhum item cadastrado ainda. Use o botão "Novo item".'
+              : 'Nenhum item encontrado com esse filtro.'}
           </p>
         )}
       </div>
 
-      <Link
-        href="/painel/vasos/novo"
-        className={styles.fab}
-        aria-label="Novo item"
-      >
+      <Link href={newHref} className={styles.fab} aria-label="Novo item">
         <svg
           width="20"
           height="20"
@@ -308,9 +327,11 @@ export function ProductTable({
       </Link>
 
       <p className={styles.note}>
-        Mostrando {filtered.length} de {items.length} vasos. Desligar
-        &quot;Aparece no site&quot; esconde o vaso sem apagar. O estoque é só
-        para a loja: não aparece no site.
+        Mostrando {filtered.length} de {items.length}{' '}
+        {isSite ? 'vasos' : 'itens'}.{' '}
+        {isSite
+          ? 'Desligar "Aparece no site" esconde o vaso sem apagar. O estoque é só para a loja: não aparece no site.'
+          : 'Os itens desta categoria ficam só no controle da loja e não aparecem no site.'}
       </p>
     </>
   );

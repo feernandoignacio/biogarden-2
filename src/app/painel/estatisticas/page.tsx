@@ -20,7 +20,7 @@ function spDate(date: Date) {
 }
 
 async function Stats() {
-  const { supabase, email, total } = await getPanelContext();
+  const { supabase, email, categories } = await getPanelContext();
 
   const now = new Date();
   const days = Array.from({ length: DAYS }, (_, index) =>
@@ -76,7 +76,7 @@ async function Stats() {
   const hasData = (rows ?? []).length > 0;
 
   return (
-    <PanelShell email={email} total={total}>
+    <PanelShell email={email} categories={categories} active="estatisticas">
       <div className={styles.heading}>
         <h1 className={styles.title}>Estatísticas</h1>
         <p className={styles.summary}>

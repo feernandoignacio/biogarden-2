@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useActionState, useState } from 'react';
 import { PRODUCT_TYPES, typeLabel, type ProductType } from '@/data/products';
+import { categoryHref, SITE_CATEGORY } from '../_categories';
 import { saveProduct, type ProductFormState } from '../actions';
 import { DeleteDraft } from './DeleteDraft';
 import styles from './ProductForm.module.css';
@@ -11,7 +12,7 @@ import styles from './ProductForm.module.css';
 export type EditableProduct = {
   slug: string;
   name: string;
-  type: ProductType;
+  type: ProductType | null;
   description: string;
   stock: number;
   visible: boolean;
@@ -30,44 +31,55 @@ const EMPTY: EditableProduct = {
 
 // Formulário de editar e de cadastrar. A foto não é trocada aqui: quem
 // coloca é o desenvolvedor, para manter o padrão do catálogo.
-export function ProductForm({ product }: { product?: EditableProduct }) {
+export function ProductForm({
+  product,
+  category,
+}: {
+  product?: EditableProduct;
+  category: { slug: string; name: string };
+}) {
   const isNew = !product;
-  const initial = product ?? EMPTY;
+  // Só os vasos têm foto, tipo e aparecem no site
+  const isSite = category.slug === SITE_CATEGORY;
+  const initial = product ?? { ...EMPTY, type: isSite ? EMPTY.type : null };
   const [state, action, pending] = useActionState<ProductFormState, FormData>(
     saveProduct.bind(null, product?.slug ?? null),
     { error: null },
   );
   const [name, setName] = useState(initial.name);
-  const [type, setType] = useState<ProductType>(initial.type);
+  const [type, setType] = useState<ProductType>(initial.type ?? 'vasos');
   const values = state.fields;
 
   return (
     <div className={styles.layout}>
       <form action={action} className={styles.card}>
-        <div className={styles.photoBlock}>
-          <span className={styles.label}>Foto</span>
-          <div className={styles.photoRow}>
-            <div className={styles.photo}>
-              {initial.image ? (
-                <Image
-                  src={initial.image}
-                  alt={`Foto atual de ${initial.name}`}
-                  fill
-                  sizes="150px"
-                />
-              ) : (
-                <NoPhotoIcon />
-              )}
+        <input type="hidden" name="category" value={category.slug} />
+        {isSite && (
+          <div className={styles.photoBlock}>
+            <span className={styles.label}>Foto</span>
+            <div className={styles.photoRow}>
+              <div className={styles.photo}>
+                {initial.image ? (
+                  <Image
+                    src={initial.image}
+                    alt={`Foto atual de ${initial.name}`}
+                    fill
+                    sizes="150px"
+                  />
+                ) : (
+                  <NoPhotoIcon />
+                )}
+              </div>
+              <p className={styles.photoNote}>
+                {initial.image
+                  ? 'Para trocar a foto, envie a nova para o desenvolvedor do site. Ele deixa no mesmo padrão das outras peças do catálogo.'
+                  : 'Este item ainda não tem foto, por isso não aparece no site. Envie a foto para o desenvolvedor do site: ele coloca no padrão do catálogo e libera o item.'}
+              </p>
             </div>
-            <p className={styles.photoNote}>
-              {initial.image
-                ? 'Para trocar a foto, envie a nova para o desenvolvedor do site. Ele deixa no mesmo padrão das outras peças do catálogo.'
-                : 'Este item ainda não tem foto, por isso não aparece no site. Envie a foto para o desenvolvedor do site: ele coloca no padrão do catálogo e libera o item.'}
-            </p>
           </div>
-        </div>
+        )}
 
-        <div className={styles.row}>
+        <div className={isSite ? styles.row : undefined}>
           <label className={styles.field}>
             Nome
             <input
@@ -76,23 +88,27 @@ export function ProductForm({ product }: { product?: EditableProduct }) {
               maxLength={80}
               defaultValue={values?.name ?? initial.name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Ex.: Vaso Toscano, Terra adubada 5 kg"
+              placeholder={
+                isSite ? 'Ex.: Vaso Toscano' : 'Ex.: Terra adubada 5 kg'
+              }
             />
           </label>
-          <label className={styles.field}>
-            Tipo
-            <select
-              name="type"
-              defaultValue={values?.type ?? initial.type}
-              onChange={(event) => setType(event.target.value as ProductType)}
-            >
-              {PRODUCT_TYPES.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          {isSite && (
+            <label className={styles.field}>
+              Tipo
+              <select
+                name="type"
+                defaultValue={values?.type ?? initial.type ?? 'vasos'}
+                onChange={(event) => setType(event.target.value as ProductType)}
+              >
+                {PRODUCT_TYPES.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
         </div>
 
         <label className={styles.field}>
@@ -102,7 +118,11 @@ export function ProductForm({ product }: { product?: EditableProduct }) {
             rows={3}
             maxLength={600}
             defaultValue={values?.description ?? initial.description}
-            placeholder="Aparece na página do item no site"
+            placeholder={
+              isSite
+                ? 'Aparece na página do item no site'
+                : 'Anotações sobre o item (marca, tamanho, fornecedor...)'
+            }
           />
         </label>
 
@@ -120,7 +140,7 @@ export function ProductForm({ product }: { product?: EditableProduct }) {
             <span className={styles.hint}>Não aparece no site.</span>
           </label>
 
-          {!isNew && (
+          {isSite && !isNew && (
             <label
               className={styles.check}
               data-disabled={!initial.image}
@@ -158,9 +178,13 @@ export function ProductForm({ product }: { product?: EditableProduct }) {
 
         <div className={styles.actions}>
           {!isNew && !initial.image && (
-            <DeleteDraft slug={initial.slug} name={initial.name} />
+            <DeleteDraft
+              slug={initial.slug}
+              name={initial.name}
+              label={isSite ? 'Apagar item provisório' : 'Apagar item'}
+            />
           )}
-          <Link href="/painel" className={styles.secondary}>
+          <Link href={categoryHref(category.slug)} className={styles.secondary}>
             Cancelar
           </Link>
           <button type="submit" className={styles.primary} disabled={pending}>
@@ -173,25 +197,27 @@ export function ProductForm({ product }: { product?: EditableProduct }) {
         </div>
       </form>
 
-      <aside className={styles.preview}>
-        <h2 className={styles.previewTitle}>Como fica no site</h2>
-        <div className={styles.previewCard}>
-          <div className={styles.previewPhoto}>
-            {initial.image ? (
-              <Image src={initial.image} alt="" fill sizes="300px" />
-            ) : (
-              <NoPhotoIcon />
-            )}
+      {isSite && (
+        <aside className={styles.preview}>
+          <h2 className={styles.previewTitle}>Como fica no site</h2>
+          <div className={styles.previewCard}>
+            <div className={styles.previewPhoto}>
+              {initial.image ? (
+                <Image src={initial.image} alt="" fill sizes="300px" />
+              ) : (
+                <NoPhotoIcon />
+              )}
+            </div>
+            <span className={styles.previewType}>{typeLabel(type)}</span>
+            <span className={styles.previewName}>{name || 'Nome do item'}</span>
           </div>
-          <span className={styles.previewType}>{typeLabel(type)}</span>
-          <span className={styles.previewName}>{name || 'Nome do item'}</span>
-        </div>
-        {!initial.image && (
-          <p className={styles.previewNote}>
-            Sem foto, o item fica só no controle da loja.
-          </p>
-        )}
-      </aside>
+          {!initial.image && (
+            <p className={styles.previewNote}>
+              Sem foto, o item fica só no controle da loja.
+            </p>
+          )}
+        </aside>
+      )}
     </div>
   );
 }

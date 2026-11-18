@@ -5,7 +5,15 @@ import { deleteDraft } from '../actions';
 import styles from './ProductForm.module.css';
 
 // Botão de apagar com confirmação em dois passos, só para itens provisórios
-export function DeleteDraft({ slug, name }: { slug: string; name: string }) {
+export function DeleteDraft({
+  slug,
+  name,
+  label,
+}: {
+  slug: string;
+  name: string;
+  label: string;
+}) {
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -32,7 +40,7 @@ export function DeleteDraft({ slug, name }: { slug: string; name: string }) {
           <path d="M6 7l1 13h10l1-13" />
           <path d="M10 11v6M14 11v6" />
         </svg>
-        Apagar item provisório
+        {label}
       </button>
     );
   }

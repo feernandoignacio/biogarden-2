@@ -1,19 +1,22 @@
+import type { PanelCategory } from '../_categories';
 import { signOut } from '../actions';
 import { PanelNav } from './PanelNav';
 import styles from './PanelShell.module.css';
 
 type Props = {
   email: string;
-  total: number;
+  categories: PanelCategory[];
+  // Item do menu marcado: o slug da categoria ou "estatisticas"
+  active: string;
   children: React.ReactNode;
 };
 
 // Moldura das telas do painel: menu verde à esquerda e conteúdo à direita
-export function PanelShell({ email, total, children }: Props) {
+export function PanelShell({ email, categories, active, children }: Props) {
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <PanelNav total={total} email={email} />
+        <PanelNav categories={categories} active={active} email={email} />
 
         <div className={styles.footer}>
           <a
